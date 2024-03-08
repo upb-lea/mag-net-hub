@@ -1,0 +1,36 @@
+[project]
+name = "mag_net_hub"
+version = "0.0.1"
+authors = [
+    { name = "Wilhelm Kirchgässner" },
+]
+description = "MagNet Challenge - Certified Models"
+readme = "README.md"
+requires-python = "==3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dynamic = ["dependencies", "optional-dependencies"]
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.txt"] }
+optional-dependencies = { dev = { file = ["requirements-dev.txt"] } }
+
+[project.urls]
+Homepage = "https://github.com/upb-lea/mag-net-hub"
+Issues = "https://github.com/upb-lea/mag-net-hub/issues"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["/src_py/mag_net_hub"]
+
+[tool.hatch.build.targets.sdist]
+packages = [
+    "/src_py/mag_net_hub",
+    "/tests",
+]
