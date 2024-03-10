@@ -55,7 +55,7 @@ p = mdl(b_wave, freq, temp)
 p, h = mdl(b_wave, freq, temp, return_h_sequence=True)
 
 # batch execution for 100 trajectories
-b_waves = np.random.randn(100, 1024)
+b_waves = np.random.randn(100, 1024)* 200e-3  # mT
 freqs = np.random.randint(100e3, 750e3, size=100)
 temps = np.random.randint(20, 80, size=100)
 p, h = mdl(b_waves, freqs, temps, return_h_sequence=True)
