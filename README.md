@@ -4,7 +4,7 @@
 <h2>Certified Models of the MagNet Challenge</h2>
 </div>
 
-![Lint and Test](https://github.com/upb-lea/mag-net-hub/.github/workflows/python-package.yml/badge.svg)
+![Lint and Test](https://github.com/upb-lea/mag-net-hub/actions/workflows/python-package.yml/badge.svg)
 
 This repository acts as a hub for selected power loss models that were elaborated by different competitors during the [MagNet Challenge 2023](https://github.com/minjiechen/magnetchallenge).
 Feel free to use these loss models for your power converter design as a complement to your datasheet.
