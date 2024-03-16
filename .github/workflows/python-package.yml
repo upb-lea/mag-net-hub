@@ -6,8 +6,10 @@ name: Python package
 on:
   push:
     branches: [ "main" ]
+    paths: ['src_py/mag-net-hub/', 'tests/']
   pull_request:
     branches: [ "main" ]
+    paths: ['src_py/mag-net-hub/', 'tests/']
 
 jobs:
   build:
