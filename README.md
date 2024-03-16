@@ -1,5 +1,5 @@
-# MagNet Challenge - Certified Models
-This repository acts as hub for selected power loss models that were elaborated by different competitors during the [MagNet Challenge 2023](https://github.com/minjiechen/magnetchallenge).
+# MagNet Toolkit - Certified Models of the MagNet Challenge
+This repository acts as a hub for selected power loss models that were elaborated by different competitors during the [MagNet Challenge 2023](https://github.com/minjiechen/magnetchallenge).
 Feel free to use these loss models for your power converter design as a complement to your datasheet.
 
 Note that they only support steady-state and no varying DC-Bias yet.
