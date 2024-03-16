@@ -1,6 +1,6 @@
 # Changelog of models
 
-## 2024-03-16
+## 2024-03-10
 - cnn_A_experiment_c9cfe_model_d893c778_p.pt
 - cnn_B_experiment_c9cfe_model_b6a920cc_p.pt
 - cnn_C_experiment_c9cfe_model_c1ced7b6_p.pt
