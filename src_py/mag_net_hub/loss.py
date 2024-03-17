@@ -1,5 +1,5 @@
 from pathlib import Path
-from mag_net_hub.paderborn import PaderbornModel
+import mag_net_hub.paderborn as pb
 
 
 MATERIALS = [
@@ -23,13 +23,7 @@ MATERIALS = [
 MODEL_ROOT = Path(__file__).parent / "models"
 
 TEAMS = {
-    "paderborn": {
-        "3C92": "cnn_A_experiment_c9cfe_model_d893c778_p.pt",
-        "T37": "cnn_B_experiment_c9cfe_model_b6a920cc_p.pt",
-        "3C95": "cnn_C_experiment_c9cfe_model_c1ced7b6_p.pt",
-        "79": "cnn_D_experiment_c9cfe_model_11672810_p.pt",
-        "ML95S": "cnn_E_experiment_c9cfe_model_5ae50f9e_p.pt",
-    },
+    "paderborn": pb.MODEL_PATHS,
     "sydney": {},
 }
 
@@ -59,7 +53,7 @@ class LossModel:
         # load corresponding model
         match self.team:
             case "paderborn":
-                self.mdl = PaderbornModel(model_path, self.material)
+                self.mdl = pb.PaderbornModel(model_path, self.material)
             case "sydney":
                 raise NotImplementedError("Sydney model not implemented yet")
 

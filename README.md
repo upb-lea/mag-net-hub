@@ -55,17 +55,14 @@ b_wave = np.random.randn(1024)* 200e-3  # mT
 freq = 124062  # Hz
 temp = 58  # °C
 
-# get scalar power loss
-p = mdl(b_wave, freq, temp)
-
-# get loss and estimated H wave
-p, h = mdl(b_wave, freq, temp, return_h_sequence=True)
+# get power loss and estimated H wave
+p, h = mdl(b_wave, freq, temp)
 
 # batch execution for 100 trajectories
 b_waves = np.random.randn(100, 1024)* 200e-3  # mT
 freqs = np.random.randint(100e3, 750e3, size=100)
 temps = np.random.randint(20, 80, size=100)
-p, h = mdl(b_waves, freqs, temps, return_h_sequence=True)
+p, h = mdl(b_waves, freqs, temps)
 
 ```
 

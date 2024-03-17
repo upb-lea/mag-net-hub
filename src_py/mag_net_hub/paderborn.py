@@ -48,6 +48,23 @@ MAT_CONST_H_MAX = {
     "N87": 100.674197407678,
 }  # in A/m
 
+MODEL_PATHS = {
+        "3C90": None,
+        "3C92": "cnn_3C92_experiment_ea1fe_model_72510647_seed_0_fold_0.pt",
+        "3C94": None,
+        "3C95": "cnn_3C95_experiment_ad6ec_model_046383a5_seed_0_fold_0.pt",
+        "3E6": "cnn_3E6_experiment_a7817_model_a1035e58_seed_0_fold_0.pt",
+        "3F4": "cnn_3F4_experiment_c234d_model_2d43b97d_seed_0_fold_0.pt",
+        "77": "cnn_77_experiment_268ae_model_5b7c92ed_seed_0_fold_0.pt",
+        "78": "cnn_78_experiment_e5297_model_77fbd758_seed_0_fold_0.pt",
+        "79": "cnn_79_experiment_45989_model_7227af72_seed_0_fold_0.pt",
+        "T37": "cnn_T37_experiment_a084a_model_fb31325e_seed_0_fold_0.pt",
+        "N27": "cnn_N27_experiment_8b7f0_model_20954a2a_seed_0_fold_0.pt",
+        "N30": "cnn_N30_experiment_5a78c_model_6bd86623_seed_0_fold_0.pt",
+        "N49": "cnn_N49_experiment_27442_model_d6234a32_seed_0_fold_0.pt",
+        "N87": None,
+        "ML95S": "cnn_ML95S_experiment_1c978_model_883a5d2f_seed_0_fold_0.pt",
+    }
 
 def form_factor(x):
     """
@@ -178,16 +195,21 @@ def get_waveform_est(full_b):
 
 def engineer_features(b_seq, freq, temp):
     """Add engineered features to data set"""
-    # check b_seq shapes
-    match b_seq.ndim:
-        case 1:
-            b_seq = b_seq[np.newaxis, :]
-        case 2:
-            pass
-        case _:
-            raise ValueError(
-                f"Expected b_seq to have either one or two dimensions, but is has {b_seq.ndim}."
-            )
+
+    match b_seq:
+        case str():
+            raise NotImplementedError("b_seq must be an array-like yet")
+        case np.ndarray():
+            # check b_seq shapes
+            match b_seq.ndim:
+                case 1:
+                    b_seq = b_seq[np.newaxis, :]
+                case 2:
+                    pass
+                case _:
+                    raise ValueError(
+                        f"Expected b_seq to have either one or two dimensions, but is has {b_seq.ndim}."
+                    )
 
     # maybe resample b_seq to 1024 samples
     if b_seq.shape[-1] != L:
@@ -248,7 +270,7 @@ def construct_tensor_seq2seq(
     ln_ploss_std=1,
     training_data=True,
 ):
-    """generate tensors with following shapes:
+    """Generate tensors with following shapes:
     For time series tensors (#time steps, #profiles/periods, #features),
     for scalar tensors (#profiles, #features)"""
     full_b = df.loc[:, ALL_B_COLS].to_numpy()
@@ -317,6 +339,14 @@ def construct_tensor_seq2seq(
 
 
 class PaderbornModel:
+    """The Paderborn model.
+
+    HARDCORE: H-field and power loss estimation for arbitrary waveforms with residual, 
+     dilated convolutional neural networks in ferrite cores
+    N Förster, W Kirchgässner, T Piepenbrock, O Schweins, O Wallscheid
+    arXiv preprint arXiv:2401.11488
+
+    """
     def __init__(self, model_path, material):
         self.model_path = model_path
         self.material = material
@@ -327,9 +357,21 @@ class PaderbornModel:
         ), f"Requested material '{material}' is not supported"
         self.b_limit = MAT_CONST_B_MAX[material]
         self.h_limit = MAT_CONST_H_MAX[material]
-        self.predicts_p_directly = model_path.stem.endswith("_p")
+        self.predicts_p_directly = True
 
     def __call__(self, b_seq, frequency, temperature):
+        """Evaluate trajectory and estimate power loss.
+        
+        Args
+        ----
+        b_seq: (B, T) array_like
+            The magnetic flux density array(s). First dimension describes the batch, the second
+             the time length (will always be interpolated to 1024 samples)
+        frequency: scalar or 1D array-like
+            The frequency operation point(s)
+        temperature: scalar or 1D array-like
+            The temperature operation point(s)
+        """
         ds = engineer_features(b_seq, frequency, temperature)
         # construct tensors
         x_cols = [
