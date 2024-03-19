@@ -1,4 +1,6 @@
 import numpy as np
+import pandas as pd
+from pathlib import Path
 from mag_net_hub.loss import LossModel, MATERIALS
 
 
@@ -56,3 +58,14 @@ def test_material_availability():
         p, h = mdl(b_wave, freq, temp)
         assert np.isscalar(p), f"p has shape {p.shape}"
         assert h.shape == (1, 1024), f"h has shape {h.shape}"
+
+def test_accuracy_slightly():
+    test_ds = pd.read_csv(Path.cwd() / 'tests' /'test_files'/ 'unit_test_data_ploss_at_450kWpm3.csv')
+    for m_lbl in MATERIALS[::-1]:
+        mdl = LossModel(material=m_lbl, team='paderborn')
+        test_mat_df = test_ds.query("material == @m_lbl")
+        p, h = mdl(test_mat_df.loc[:, [c for c in test_mat_df if c.startswith("B_t_")]].to_numpy(),
+                   test_mat_df.loc[:, "freq"].to_numpy(),
+                   test_mat_df.loc[:, 'temp'].to_numpy())
+        avg_rel_err = np.mean(np.abs(test_mat_df.ploss - p)/ test_mat_df.ploss)
+        assert avg_rel_err < 0.70, f"Inaccurate for material {m_lbl} with prediction: {p} W/m³"
