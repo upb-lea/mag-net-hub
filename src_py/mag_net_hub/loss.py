@@ -57,9 +57,17 @@ class LossModel:
             case "sydney":
                 raise NotImplementedError("Sydney model not implemented yet")
 
-    def __call__(self, b_field, frequency, temperature, return_h_sequence=True):
-        p, h = self.mdl(b_field, frequency, temperature)
-        if return_h_sequence:
-            return p, h
-        else:
-            return p
+    def __call__(self, b_field, frequency, temperature):
+        """Evaluate trajectory and estimate power loss.
+        
+        Args
+        ----
+        b_seq: (B, T) array_like
+            The magnetic flux density array(s). First dimension describes the batch, the second
+             the time length (will always be interpolated to 1024 samples)
+        frequency: scalar or 1D array-like
+            The frequency operation point(s)
+        temperature: scalar or 1D array-like
+            The temperature operation point(s)
+        """
+        return self.mdl(b_field, frequency, temperature)
