@@ -32,7 +32,7 @@ MAT_CONST_B_MAX = {
 }  # in T
 MAT_CONST_H_MAX = {
     "3C90": 84.7148502254261,
-    "3C94": 64.8575649838852,
+    "3C94": 64.8575649838852,  
     "3E6": 74.1579701817075,
     "3F4": 150,
     "77": 86.5681744566843,
@@ -56,6 +56,8 @@ NORM_DENOM = {
         "mean_abs_dbdt": 0.001098,
         "log_mean_abs_dbdt": 10.097290,
         "sample_time": 0.000020,
+        "b_deriv": 9888.829113924028,
+        "b_deriv_sq": 677552639.6192261,
     },
     "3C92": {
         "b_peak2peak": 0.638772,
@@ -63,6 +65,8 @@ NORM_DENOM = {
         "mean_abs_dbdt": 0.001246,
         "log_mean_abs_dbdt": 10.191507,
         "sample_time": 0.000020,
+        "b_deriv": 8367.455279302658,
+        "b_deriv_sq": 352400581.9367888,
     },
     "3C94": {
         "b_peak2peak": 0.561696288415998,
@@ -70,6 +74,8 @@ NORM_DENOM = {
         "mean_abs_dbdt": 0.001094609016982872,
         "log_mean_abs_dbdt": 10.09547460054903,
         "sample_time": 2.002002002002002e-05,
+        "b_deriv": 9369.848364186466,
+        "b_deriv_sq": 722100525.0000031,
     },
     "3C95": {
         "b_peak2peak": 0.643972929264389,
@@ -77,6 +83,8 @@ NORM_DENOM = {
         "mean_abs_dbdt": 0.001255971974873893,
         "log_mean_abs_dbdt": 10.19012406875038,
         "sample_time": 2.000400080016003e-05,
+        "b_deriv": 8434.886044920588,
+        "b_deriv_sq": 394837993.91482246,
     },
     "3E6": {
         "b_peak2peak": 0.39860703974419,
@@ -84,6 +92,8 @@ NORM_DENOM = {
         "mean_abs_dbdt": 0.0007754383944842351,
         "log_mean_abs_dbdt": 10.237231774124638,
         "sample_time": 2.002002002002002e-05,
+        "b_deriv": 10961.711420802148,
+        "b_deriv_sq": 594537528.5676531,
     },
     "3F4": {
         "b_peak2peak": 0.62579,
@@ -91,6 +101,8 @@ NORM_DENOM = {
         "mean_abs_dbdt": 0.0012214485516744327,
         "log_mean_abs_dbdt": 10.204883300750092,
         "sample_time": 2.002002002002002e-05,
+        "b_deriv": 11289.048646402262,
+        "b_deriv_sq": 767625384.1351097,
     },
     "77": {
         "b_peak2peak": 0.62941,
@@ -98,6 +110,8 @@ NORM_DENOM = {
         "mean_abs_dbdt": 0.001227556207233634,
         "log_mean_abs_dbdt": 10.207264569238735,
         "sample_time": 2.002002002002002e-05,
+        "b_deriv": 10512.189743589744,
+        "b_deriv_sq": 705767456.3398341,
     },
     "78": {
         "b_peak2peak": 0.6315575499770669,
@@ -105,6 +119,8 @@ NORM_DENOM = {
         "mean_abs_dbdt": 0.001231771095979432,
         "log_mean_abs_dbdt": 10.217365718778147,
         "sample_time": 2.002002002002002e-05,
+        "b_deriv": 10374.080553295375,
+        "b_deriv_sq": 688850200.676364,
     },
     "79": {
         "b_peak2peak": 0.648230254830443,
@@ -112,6 +128,8 @@ NORM_DENOM = {
         "mean_abs_dbdt": 0.0012638156025685287,
         "log_mean_abs_dbdt": 10.194239618633777,
         "sample_time": 2.00160128102482e-05,
+        "b_deriv": 8233.983883950554,
+        "b_deriv_sq": 495462859.8505281,
     },
     "T37": {
         "b_peak2peak": 0.509931827049285,
@@ -119,6 +137,8 @@ NORM_DENOM = {
         "mean_abs_dbdt": 0.0009933972666621286,
         "log_mean_abs_dbdt": 10.207037964928544,
         "sample_time": 2.00160128102482e-05,
+        "b_deriv": 10816.309729628758,
+        "b_deriv_sq": 757546320.923036,
     },
     "N27": {
         "b_peak2peak": 0.6318699999999999,
@@ -126,6 +146,8 @@ NORM_DENOM = {
         "mean_abs_dbdt": 0.0012323949169110505,
         "log_mean_abs_dbdt": 10.207788696606462,
         "sample_time": 2.002002002002002e-05,
+        "b_deriv": 10348.1536885246,
+        "b_deriv_sq": 655163308.8104846,
     },
     "N30": {
         "b_peak2peak": 0.40126,
@@ -133,6 +155,8 @@ NORM_DENOM = {
         "mean_abs_dbdt": 0.0007812218963831858,
         "log_mean_abs_dbdt": 10.20594094230823,
         "sample_time": 2.002002002002002e-05,
+        "b_deriv": 10772.915082382753,
+        "b_deriv_sq": 640974360.0000046,
     },
     "N49": {
         "b_peak2peak": 0.6349207696798069,
@@ -140,6 +164,8 @@ NORM_DENOM = {
         "mean_abs_dbdt": 0.0012362016813373098,
         "log_mean_abs_dbdt": 9.972437816965455,
         "sample_time": 2.002002002002002e-05,
+        "b_deriv": 10407.538775510218,
+        "b_deriv_sq": 742250594.1211493,
     },
     "N87": {
         "b_peak2peak": 0.561429326791338,
@@ -147,6 +173,8 @@ NORM_DENOM = {
         "mean_abs_dbdt": 0.001094995270801449,
         "log_mean_abs_dbdt": 10.104824015905193,
         "sample_time": 2.002002002002002e-05,
+        "b_deriv": 10006.669716376984,
+        "b_deriv_sq": 616830982.1245888,
     },
     "ML95S": {
         "b_peak2peak": 0.660470219971137,
@@ -154,6 +182,8 @@ NORM_DENOM = {
         "mean_abs_dbdt": 0.0012853467115523114,
         "log_mean_abs_dbdt": 9.922533485496238,
         "sample_time": 1.997602876548142e-05,
+        "b_deriv": 8000.255232581114,
+        "b_deriv_sq": 434328441.4934993,
     },
 }
 
@@ -320,6 +350,12 @@ def engineer_features(b_seq, freq, temp, material):
                     raise ValueError(
                         f"Expected b_seq to have either one or two dimensions, but is has {b_seq.ndim}."
                     )
+        case list() | tuple():
+            b_seq = np.array(b_seq)
+        case _:
+            raise ValueError(
+                f"Type of b_seq={type(b_seq)} nut supported. Please provide as np.ndarray or list"
+            )
 
     # maybe resample b_seq to 1024 samples
     if b_seq.shape[-1] != L:
@@ -386,7 +422,7 @@ def construct_tensor_seq2seq(
     full_b = df.loc[:, ALL_B_COLS].to_numpy()
     if training_data:
         full_h = df.loc[:, ALL_H_COLS].to_numpy()
-    mat = df.iloc[0, :].loc['material']
+    mat = df.iloc[0, :].loc["material"]
     df = df.drop(columns=[c for c in df if c.startswith(("H_t_", "B_t_", "material"))])
     assert len(df) > 0, "empty dataframe error"
     # put freq on first place since Architecture expects it there
@@ -405,7 +441,7 @@ def construct_tensor_seq2seq(
     ]
     for other_col in other_cols:
         X.loc[:, other_col] /= NORM_DENOM[mat][other_col]
-    
+
     if training_data:
         # add p loss as target (only used as target when predicting p loss directly), must be last column
         X = X.assign(ln_ploss=(np.log(df.ploss) - ln_ploss_mean) / ln_ploss_std)
@@ -427,10 +463,11 @@ def construct_tensor_seq2seq(
         tens_l += [
             torch.tensor(per_profile_scaled_b.T[..., np.newaxis], dtype=torch.float32),
             torch.tensor(
-                b_deriv.T[..., np.newaxis] / np.abs(b_deriv).max(), dtype=torch.float32
+                b_deriv.T[..., np.newaxis] / NORM_DENOM[mat]["b_deriv"],
+                dtype=torch.float32,
             ),
             torch.tensor(
-                b_deriv_sq.T[..., np.newaxis] / np.abs(b_deriv_sq).max(),
+                b_deriv_sq.T[..., np.newaxis] / NORM_DENOM[mat]["b_deriv_sq"],
                 dtype=torch.float32,
             ),
             torch.tensor(tantan_b.T[..., np.newaxis], dtype=torch.float32),
