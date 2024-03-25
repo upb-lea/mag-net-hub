@@ -1,3 +1,4 @@
+"""Loss model."""
 from pathlib import Path
 import mag_net_hub.paderborn as pb
 
@@ -29,6 +30,8 @@ TEAMS = {
 
 
 class LossModel:
+    """LossModel definition."""
+
     def __init__(self, material="3C92", team="paderborn"):
         self.material = material.upper()
         self.team = team.lower()
@@ -62,7 +65,7 @@ class LossModel:
         
         Args
         ----
-        b_seq: (B, T) array_like
+        b_field: (B, T) array_like
             The magnetic flux density array(s). First dimension describes the batch, the second
              the time length (will always be interpolated to 1024 samples)
         frequency: scalar or 1D array-like

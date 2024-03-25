@@ -1,5 +1,7 @@
-"""Source:
-https://github.com/upb-lea/hardcore-magnet-challenge
+"""
+File contains the model according to the Paderborn University approach for the magnet challenge.
+
+Source: https://github.com/upb-lea/hardcore-magnet-challenge
 """
 
 import numpy as np
@@ -208,6 +210,8 @@ MODEL_PATHS = {
 
 def form_factor(x):
     """
+    Calculate the form factor.
+
     definition:      kf = rms(x) / mean(abs(x))
     for ideal sine:  np.pi/(2*np.sqrt(2))
     """
@@ -216,6 +220,8 @@ def form_factor(x):
 
 def crest_factor(x):
     """
+    Calculate the crest factor.
+
     definition:      kc = rms(x) / max(x)
     for ideal sine:  np.sqrt(2)
     """
@@ -224,6 +230,8 @@ def crest_factor(x):
 
 def bool_filter_sine(b, rel_kf=0.01, rel_kc=0.01, rel_0_dev=0.1):
     """
+    Bool classification for sinusoidal waveforms, used by function get_waveform_est.
+
     b: input flux density (nxm)-array with n m-dimensional flux density waveforms
     rel_kf: (allowed) relative deviation of the form factor for sine classification
     rel_kc: (allowed) relative deviation of the crest factor for sine classification
@@ -253,6 +261,7 @@ def bool_filter_sine(b, rel_kf=0.01, rel_kc=0.01, rel_0_dev=0.1):
 
 
 def bool_filter_triangular(b, rel_kf=0.005, rel_kc=0.005):
+    """Bool classification for triangular waveforms, used by function get_waveform_est."""
     kf_triangular = 2 / np.sqrt(3)
     kc_triangular = np.sqrt(3)
 
@@ -275,12 +284,15 @@ def bool_filter_triangular(b, rel_kf=0.005, rel_kc=0.005):
 
 
 def get_waveform_est(full_b):
-    """From Till's tp-1.4.7.3.1 NB, return waveform class.
+    """
+    Classify the waveforms into [other, square, triangular, sine].
+
+    From Till's tp-1.4.7.3.1 NB, return waveform class.
     Postprocessing from wk-1.1-EDA NB.
 
     Return class estimate 'k', where [0, 1, 2, 3] corresponds to
-    [other, square, triangular, sine]"""
-
+    [other, square, triangular, sine].
+    """
     # labels init all with 'other'
     k = np.zeros(full_b.shape[0], dtype=int)
 
@@ -334,8 +346,7 @@ def get_waveform_est(full_b):
 
 
 def engineer_features(b_seq, freq, temp, material):
-    """Add engineered features to data set"""
-
+    """Add engineered features to data set."""
     match b_seq:
         case str():
             raise NotImplementedError("b_seq must be an array-like yet")
@@ -416,9 +427,13 @@ def construct_tensor_seq2seq(
     ln_ploss_std=1,
     training_data=True,
 ):
-    """Generate tensors with following shapes:
-    For time series tensors (#time steps, #profiles/periods, #features),
-    for scalar tensors (#profiles, #features)"""
+    """
+    Generate tensors.
+
+    Shapes as following:
+     - For time series tensors (#time steps, #profiles/periods, #features),
+     - for scalar tensors (#profiles, #features).
+    """
     full_b = df.loc[:, ALL_B_COLS].to_numpy()
     if training_data:
         full_h = df.loc[:, ALL_H_COLS].to_numpy()
