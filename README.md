@@ -70,3 +70,7 @@ p, h = mdl(b_waves, freqs, temps)
 
 ### Matlab
 TBD
+
+
+## Contributing
+Open a pull request to directly suggest small improvements. For larger suggestions, first open an issue to discuss your ideas. 
