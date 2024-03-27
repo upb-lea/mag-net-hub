@@ -32,7 +32,9 @@ Supported materials:
 ## Installation
 
 ### Python
-TBD
+```
+pip install mag_net_hub
+```
 
 ### Matlab
 TBD
@@ -45,10 +47,10 @@ Hence, no training is conducted in this project.
 ### Python
 ```py
 import numpy as np
-from mag_net_hub.loss import LossModel
+import mag_net_hub as mnh
 
 # instantiate material-specific model
-mdl = LossModel(material="3C92", team="paderborn")
+mdl = mnh.loss.LossModel(material="3C92", team="paderborn")
 
 # dummy B field data (one trajectory with 1024 samples)
 b_wave = np.random.randn(1024)* 200e-3  # mT

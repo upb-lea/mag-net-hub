@@ -7,9 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.2] - 2024-03-27
+### Fixed
+ - Missing requirements and missing models in pip package
+
 ## [0.0.1] - 2024-03-26
 ### Added
  - Paderborn Model 
 
-[unreleased]: https://github.com/upb-lea/mag-net-hub/compare/v0.0.1...HEAD
+[unreleased]: https://github.com/upb-lea/mag-net-hub/compare/v0.0.2...HEAD
+[0.0.2]: https://github.com/upb-lea/mag-net-hub/compare/v0.0.1...v0.0.2
 [0.0.1]: https://github.com/upb-lea/mag-net-hub/releases/tag/v0.0.1
