@@ -23,8 +23,11 @@ Homepage = "https://github.com/upb-lea/mag-net-hub"
 Issues = "https://github.com/upb-lea/mag-net-hub/issues"
 
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-requirements-txt"]
 build-backend = "hatchling.build"
+
+[tool.hatch.metadata.hooks.requirements_txt]
+files = ["requirements.txt"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src_py/mag_net_hub"]
@@ -32,7 +35,9 @@ packages = ["src_py/mag_net_hub"]
 [tool.hatch.build.targets.sdist]
 include = [
     "src_py/mag_net_hub/*.py",
+    "src_py/mag_net_hub/models/paderborn/*.pt",
     "tests",
+    "requirements.txt"
 ]
 
 
