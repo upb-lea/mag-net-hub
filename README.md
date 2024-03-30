@@ -33,7 +33,7 @@ Supported materials:
 
 ### Python
 ```
-pip install mag_net_hub
+TBD
 ```
 
 ### Matlab
