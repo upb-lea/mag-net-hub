@@ -6,10 +6,10 @@ name: Python package
 on:
   push:
     branches: [ "main" ]
-    paths: ['src_py/mag-net-hub/', 'tests/']
+    paths: ['src_py/magnethub/', 'tests/']
   pull_request:
     branches: [ "main" ]
-    paths: ['src_py/mag-net-hub/', 'tests/']
+    paths: ['src_py/magnethub/', 'tests/']
   
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -39,7 +39,7 @@ jobs:
     - name: Lint with ruff
       run: |
         # stop the build if there are Python syntax errors or undefined names
-        ruff check --fix -v --show-files src_py/mag-net-hub/*.py
+        ruff check --fix -v --show-files src_py/magnethub/*.py
     - name: Test with pytest
       run: |
         pytest
