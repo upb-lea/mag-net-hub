@@ -34,7 +34,7 @@ MAT_CONST_B_MAX = {
 }  # in T
 MAT_CONST_H_MAX = {
     "3C90": 84.7148502254261,
-    "3C94": 64.8575649838852,  
+    "3C94": 64.8575649838852,
     "3E6": 74.1579701817075,
     "3F4": 150,
     "77": 86.5681744566843,
@@ -189,7 +189,7 @@ NORM_DENOM = {
     },
 }
 
-MODEL_PATHS = {
+MAT2FILENAME = {
     "3C90": "cnn_3C90_experiment_1b4d8_model_f3915868_seed_0_fold_0.pt",
     "3C92": "cnn_3C92_experiment_ea1fe_model_72510647_seed_0_fold_0.pt",
     "3C94": "cnn_3C94_experiment_56441_model_55693612_seed_0_fold_0.pt",
@@ -299,8 +299,7 @@ def get_waveform_est(full_b):
     # square
     k[
         np.all(
-            np.abs(full_b[:, 250:500:50] - full_b[:, 200:450:50])
-            / np.max(np.abs(full_b), axis=1, keepdims=True)
+            np.abs(full_b[:, 250:500:50] - full_b[:, 200:450:50]) / np.max(np.abs(full_b), axis=1, keepdims=True)
             < 0.05,
             axis=1,
         )
@@ -319,22 +318,14 @@ def get_waveform_est(full_b):
     other_b /= np.abs(other_b).max(axis=1, keepdims=True)
     other_b_ft = np.abs(np.fft.fft(other_b, axis=1))
     other_b_ft /= other_b_ft.max(axis=1, keepdims=True)
-    msk_of_newly_identified_sines = np.all(
-        (other_b_ft[:, 3:10] < 0.03) & (other_b_ft[:, [2]] < 0.2), axis=1
+    msk_of_newly_identified_sines = np.all((other_b_ft[:, 3:10] < 0.03) & (other_b_ft[:, [2]] < 0.2), axis=1)
+    msk_of_newly_identified_triangs = np.all(((other_b_ft[:, 1:8] - other_b_ft[:, 2:9]) > 0), axis=1) | np.all(
+        ((other_b_ft[:, 1:8:2] > 1e-2) & (other_b_ft[:, 2:9:2] < 1e-2)), axis=1
     )
-    msk_of_newly_identified_triangs = np.all(
-        ((other_b_ft[:, 1:8] - other_b_ft[:, 2:9]) > 0), axis=1
-    ) | np.all(((other_b_ft[:, 1:8:2] > 1e-2) & (other_b_ft[:, 2:9:2] < 1e-2)), axis=1)
-    msk_of_newly_identified_triangs = (
-        msk_of_newly_identified_triangs & ~msk_of_newly_identified_sines
-    )
-    msk_of_newly_identified_squares = np.all(
-        (other_b_ft[:, 1:4:2] > 1e-2) & (other_b_ft[:, 2:5:2] < 1e-3), axis=1
-    )
+    msk_of_newly_identified_triangs = msk_of_newly_identified_triangs & ~msk_of_newly_identified_sines
+    msk_of_newly_identified_squares = np.all((other_b_ft[:, 1:4:2] > 1e-2) & (other_b_ft[:, 2:5:2] < 1e-3), axis=1)
     msk_of_newly_identified_squares = (
-        msk_of_newly_identified_squares
-        & ~msk_of_newly_identified_sines
-        & ~msk_of_newly_identified_triangs
+        msk_of_newly_identified_squares & ~msk_of_newly_identified_sines & ~msk_of_newly_identified_triangs
     )
     idx_sines = np.arange(k.size)[k == 0][msk_of_newly_identified_sines]
     idx_triangs = np.arange(k.size)[k == 0][msk_of_newly_identified_triangs]
@@ -358,27 +349,18 @@ def engineer_features(b_seq, freq, temp, material):
                 case 2:
                     pass
                 case _:
-                    raise ValueError(
-                        f"Expected b_seq to have either one or two dimensions, but is has {b_seq.ndim}."
-                    )
+                    raise ValueError(f"Expected b_seq to have either one or two dimensions, but is has {b_seq.ndim}.")
         case list() | tuple():
             b_seq = np.array(b_seq)
         case _:
-            raise ValueError(
-                f"Type of b_seq={type(b_seq)} nut supported. Please provide as np.ndarray or list"
-            )
+            raise ValueError(f"Type of b_seq={type(b_seq)} nut supported. Please provide as np.ndarray or list")
 
     # maybe resample b_seq to 1024 samples
     if b_seq.shape[-1] != L:
         actual_len = b_seq.shape[-1]
         query_points = np.arange(L)
         support_points = np.arange(actual_len) * L / actual_len
-        b_seq = np.row_stack(
-            [
-                np.interp(query_points, support_points, b_seq[i])
-                for i in range(b_seq.shape[0])
-            ]
-        )
+        b_seq = np.row_stack([np.interp(query_points, support_points, b_seq[i]) for i in range(b_seq.shape[0])])
 
     waveforms = get_waveform_est(b_seq)
     waveforms_df = pd.DataFrame(
@@ -451,9 +433,7 @@ def construct_tensor_seq2seq(
     orig_freq = X.loc[:, ["freq"]].copy().to_numpy()
     X.loc[:, ["temp", "freq"]] /= np.array([75.0, FREQ_SCALE], dtype=np.float32)
     X.loc[:, "freq"] = np.log(X.freq)
-    other_cols = [
-        c for c in x_cols if c not in ["temp", "freq"] and not c.startswith("wav_")
-    ]
+    other_cols = [c for c in x_cols if c not in ["temp", "freq"] and not c.startswith("wav_")]
     for other_col in other_cols:
         X.loc[:, other_col] /= NORM_DENOM[mat][other_col]
 
@@ -487,14 +467,10 @@ def construct_tensor_seq2seq(
             ),
             torch.tensor(tantan_b.T[..., np.newaxis], dtype=torch.float32),
         ]
-    tens_l += [
-        torch.tensor(full_b.T[..., np.newaxis], dtype=torch.float32)
-    ]  # b field is penultimate column
+    tens_l += [torch.tensor(full_b.T[..., np.newaxis], dtype=torch.float32)]  # b field is penultimate column
     if training_data:
         tens_l += [
-            torch.tensor(
-                full_h.T[..., np.newaxis], dtype=torch.float32
-            ),  # target is last column
+            torch.tensor(full_h.T[..., np.newaxis], dtype=torch.float32),  # target is last column
         ]
 
     # return ts tensor with shape: (#time steps, #profiles, #features), and scalar tensor with (#profiles, #features)
@@ -538,15 +514,8 @@ class PaderbornModel:
         """
         ds = engineer_features(b_seq, frequency, temperature, self.material)
         # construct tensors
-        x_cols = [
-            c
-            for c in ds
-            if c not in ["ploss", "kfold", "material"]
-            and not c.startswith(("B_t_", "H_t_"))
-        ]
-        b_limit_per_profile = (
-            np.abs(ds.loc[:, ALL_B_COLS].to_numpy()).max(axis=1).reshape(-1, 1)
-        )
+        x_cols = [c for c in ds if c not in ["ploss", "kfold", "material"] and not c.startswith(("B_t_", "H_t_"))]
+        b_limit_per_profile = np.abs(ds.loc[:, ALL_B_COLS].to_numpy()).max(axis=1).reshape(-1, 1)
         h_limit = self.h_limit * b_limit_per_profile / self.b_limit
         b_limit_test_fold = self.b_limit
         b_limit_test_fold_pp = b_limit_per_profile
@@ -563,12 +532,8 @@ class PaderbornModel:
 
             if self.predicts_p_directly:
                 # prepare torch tensors for normalization scales
-                b_limit_test_fold_torch = torch.as_tensor(
-                    b_limit_test_fold, dtype=torch.float32
-                )
-                h_limit_test_fold_torch = torch.as_tensor(
-                    h_limit_test_fold, dtype=torch.float32
-                )
+                b_limit_test_fold_torch = torch.as_tensor(b_limit_test_fold, dtype=torch.float32)
+                h_limit_test_fold_torch = torch.as_tensor(h_limit_test_fold, dtype=torch.float32)
                 freq_scale_torch = torch.as_tensor(FREQ_SCALE, dtype=torch.float32)
 
                 val_pred_p, val_pred_h = self.mdl(

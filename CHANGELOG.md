@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.4] - 2024-03-30
+### Changed
+ - Change python import package name to be magnethub to avoid underscores
+
 ## [0.0.3] - 2024-03-28
 ### Changed
  - Change pip installation name from mag_net_hub to mag-net-hub

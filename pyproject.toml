@@ -1,10 +1,10 @@
 [project]
 name = "mag-net-hub"
-version = "0.0.3"
+version = "0.0.4"
 authors = [
     { name = "Wilhelm Kirchgässner" },
 ]
-description = "MagNet Challenge - Certified Models"
+description = "MagNet Toolkit - Certified Models of the MagNet Challenge"
 readme = "README.md"
 requires-python = "~=3.10"
 classifiers = [
@@ -30,12 +30,12 @@ build-backend = "hatchling.build"
 files = ["requirements.txt"]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src_py/mag_net_hub"]
+packages = ["src_py/magnethub"]
 
 [tool.hatch.build.targets.sdist]
 include = [
-    "src_py/mag_net_hub/*.py",
-    "src_py/mag_net_hub/models/paderborn/*.pt",
+    "src_py/magnethub/*.py",
+    "src_py/magnethub/models/paderborn/*.pt",
     "tests",
     "requirements.txt"
 ]
@@ -49,10 +49,10 @@ exclude = [
     ".venv",
     "venv"]
 
-line-length = 88
+line-length = 120
 indent-width = 4
 
-target-version = "py39"
+target-version = "py310"
 
 [tool.ruff.lint]
 select = ["E4", "E7", "E9", "F", "B", "D", "D417"]

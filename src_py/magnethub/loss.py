@@ -1,6 +1,11 @@
-"""Loss model."""
+"""The general loss model.
+
+The LossModel class wraps all other teams' models.
+It sanitizes user arguments that would be boilerplate code for any team's code.
+"""
+
 from pathlib import Path
-import mag_net_hub.paderborn as pb
+import magnethub.paderborn as pb
 
 
 MATERIALS = [
@@ -24,7 +29,7 @@ MATERIALS = [
 MODEL_ROOT = Path(__file__).parent / "models"
 
 TEAMS = {
-    "paderborn": pb.MODEL_PATHS,
+    "paderborn": pb.MAT2FILENAME,
     "sydney": {},
 }
 
@@ -38,19 +43,13 @@ class LossModel:
 
         # value checks
         if self.material not in MATERIALS:
-            raise ValueError(
-                f"Chosen material '{self.material}' not supported. Must be either {', '.join(MATERIALS)}"
-            )
+            raise ValueError(f"Chosen material '{self.material}' not supported. Must be either {', '.join(MATERIALS)}")
         if self.team not in list(TEAMS.keys()):
-            raise ValueError(
-                f"Chosen team '{self.team}' not supported. Must be in {', '.join(TEAMS.keys())}"
-            )
+            raise ValueError(f"Chosen team '{self.team}' not supported. Must be in {', '.join(TEAMS.keys())}")
 
         model_file_name = TEAMS[self.team].get(self.material, None)
         if model_file_name is None:
-            raise ValueError(
-                f"Team {self.team.capitalize()} does not offer a model for material {self.material}"
-            )
+            raise ValueError(f"Team {self.team.capitalize()} does not offer a model for material {self.material}")
         model_path = MODEL_ROOT / self.team / model_file_name
 
         # load corresponding model
@@ -62,7 +61,7 @@ class LossModel:
 
     def __call__(self, b_field, frequency, temperature):
         """Evaluate trajectory and estimate power loss.
-        
+
         Args
         ----
         b_field: (B, T) array_like

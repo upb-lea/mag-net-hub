@@ -9,7 +9,8 @@
 This repository acts as a hub for selected power loss models that were elaborated by different competitors during the [MagNet Challenge 2023](https://github.com/minjiechen/magnetchallenge).
 Feel free to use these loss models for your power converter design as a complement to your datasheet.
 
-Note that they only support steady-state and no varying DC-Bias yet.
+The loss models are designed such that you can request a certain frequency, temperature, material and $B$ wave (sequence), in order to be provided with a scalar power loss estimate and a corresponding $H$ wave estimate.
+Note that only steady-state and no varying DC-Bias is supported yet.
 
 Supported materials:
 - ML95S
@@ -32,8 +33,13 @@ Supported materials:
 ## Installation
 
 ### Python
+We strongly recommend Python __3.10__.
+Higher versions may also work.
+
+Then install through pip:
+
 ```
-TBD
+pip install mag-net-hub
 ```
 
 ### Matlab
@@ -47,10 +53,10 @@ Hence, no training is conducted in this project.
 ### Python
 ```py
 import numpy as np
-import mag_net_hub as mnh
+import magnethub as mh
 
 # instantiate material-specific model
-mdl = mnh.loss.LossModel(material="3C92", team="paderborn")
+mdl = mh.loss.LossModel(material="3C92", team="paderborn")
 
 # dummy B field data (one trajectory with 1024 samples)
 b_wave = np.random.randn(1024)* 200e-3  # mT
@@ -73,4 +79,38 @@ TBD
 
 
 ## Contributing
-Open a pull request to directly suggest small improvements. For larger suggestions, first open an issue to discuss your ideas. 
+Whether you want to contribute your submission to the MagNet Challenge, or you are a single contributor who wants to add an awesome model to this hub -- any contribution is welcome.
+
+Open a pull request to directly suggest small improvements to the infrastructure or to add your model (with performance statistics preferred). 
+For larger suggestions, please first open an issue or go to the discussion section to discuss your ideas. 
+
+See the below folder structure overview with annotations on how to contribute a model.
+
+```
+.
+├── src_py
+│   └── magnethub
+│       ├── __init__.py
+│       ├── loss.py
+│       ├── models
+│       │   ├── paderborn
+│       │   │   ├── changelog.md
+│       │   │   ├── cnn_3C90_experiment_1b4d8_model_f3915868_seed_0_fold_0.pt
+│       │   │   ├── cnn_3C92_experiment_ea1fe_model_72510647_seed_0_fold_0.pt
+|       |   |   └──  ...
+│       │   ├── sydney
+│       │   │   └── ...
+│       │   └── <add your contributor folder here>
+│       │   │   └── <add your model coefficients here>
+│       ├── paderborn.py
+|       ├── sydney.py
+|       ├── <add your model code here>
+
+```
+
+Any number of models can be incorporated easily according to this code structure policy.
+If you have added model coefficients and execution logic via code, it only requires to be hooked in
+`loss.py` and you are ready to fire this pull request (PR).
+
+If it is possible, please also consider adding tests for your model logic under `tests/`, writing comprehensive docstrings in your code with some comments, and discuss the performance of your model in your PR. 
+Thank you!
