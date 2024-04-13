@@ -64,12 +64,17 @@ class LossModel:
 
         Args
         ----
-        b_field: (B, T) array_like
-            The magnetic flux density array(s). First dimension describes the batch, the second
+        b_field: (X, Y) array_like
+            The magnetic flux density array(s) in T. First dimension X describes the batch size, the second Y
              the time length (will always be interpolated to 1024 samples)
         frequency: scalar or 1D array-like
-            The frequency operation point(s)
+            The frequency operation point(s) in Hz
         temperature: scalar or 1D array-like
-            The temperature operation point(s)
+            The temperature operation point(s) in °C
+        
+        Return
+        ------
+        p, h: (X,) np.array, (X, Y) np.ndarray
+            The estimated power loss (p) in W/m³ and the estimated magnetic field strength (h) in A/m.
         """
         return self.mdl(b_field, frequency, temperature)

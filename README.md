@@ -10,7 +10,9 @@ This repository acts as a hub for selected power loss models that were elaborate
 Feel free to use these loss models for your power converter design as a complement to your datasheet.
 
 The loss models are designed such that you can request a certain frequency, temperature, material and $B$ wave (sequence), in order to be provided with a scalar power loss estimate and a corresponding $H$ wave estimate.
-Note that only steady-state and no varying DC-Bias is supported yet.
+
+__Disclaimer__: Only steady-state and no varying DC-Bias is supported yet. 
+Moreover, training data stemmed from measurements on toroid-shaped ferrites that had a fix size.
 
 Supported materials:
 - ML95S
@@ -42,6 +44,13 @@ Then install through pip:
 pip install mag-net-hub
 ```
 
+or, alternatively, clone this repo and execute
+
+```
+cd mag-net-hub
+pip install .
+```
+
 ### Matlab
 TBD
 
@@ -59,15 +68,15 @@ import magnethub as mh
 mdl = mh.loss.LossModel(material="3C92", team="paderborn")
 
 # dummy B field data (one trajectory with 1024 samples)
-b_wave = np.random.randn(1024)* 200e-3  # mT
+b_wave = np.random.randn(1024)* 200e-3  # in T
 freq = 124062  # Hz
 temp = 58  # °C
 
-# get power loss and estimated H wave
+# get power loss in W/m³ and estimated H wave in A/m
 p, h = mdl(b_wave, freq, temp)
 
 # batch execution for 100 trajectories
-b_waves = np.random.randn(100, 1024)* 200e-3  # mT
+b_waves = np.random.randn(100, 1024)* 200e-3  # in T
 freqs = np.random.randint(100e3, 750e3, size=100)
 temps = np.random.randint(20, 80, size=100)
 p, h = mdl(b_waves, freqs, temps)

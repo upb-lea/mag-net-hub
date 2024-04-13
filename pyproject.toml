@@ -1,6 +1,6 @@
 [project]
 name = "mag-net-hub"
-version = "0.0.4"
+version = "0.0.5"
 authors = [
     { name = "Wilhelm Kirchgässner" },
 ]

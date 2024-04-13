@@ -504,13 +504,18 @@ class PaderbornModel:
 
         Args
         ----
-        b_seq: (B, T) array_like
-            The magnetic flux density array(s). First dimension describes the batch, the second
+        b_seq: (X, Y) array_like
+            The magnetic flux density array(s) in T. First dimension X describes the batch, the second Y
              the time length (will always be interpolated to 1024 samples)
         frequency: scalar or 1D array-like
-            The frequency operation point(s)
+            The frequency operation point(s) in Hz
         temperature: scalar or 1D array-like
-            The temperature operation point(s)
+            The temperature operation point(s) in °C
+        
+        Return
+        ------
+        p, h: (X,) np.array, (X, Y) np.ndarray
+            The estimated power loss (p) in W/m³ and the estimated magnetic field strength (h) in A/m.
         """
         ds = engineer_features(b_seq, frequency, temperature, self.material)
         # construct tensors
