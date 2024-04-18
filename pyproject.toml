@@ -12,7 +12,7 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
-dynamic = ["dependencies", "optional-dependencies"]
+dynamic = ["dependencies"] # commented due to packaging issues: "optional-dependencies"
 
 [tool.setuptools.dynamic]
 dependencies = { file = ["requirements.txt"] }
