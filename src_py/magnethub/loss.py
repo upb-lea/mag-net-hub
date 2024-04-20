@@ -6,6 +6,7 @@ It sanitizes user arguments that would be boilerplate code for any team's code.
 
 from pathlib import Path
 import magnethub.paderborn as pb
+import magnethub.sydney as sy
 
 
 MATERIALS = [
@@ -30,7 +31,7 @@ MODEL_ROOT = Path(__file__).parent / "models"
 
 TEAMS = {
     "paderborn": pb.MAT2FILENAME,
-    "sydney": {},
+    "sydney": sy.MAT2FILENAME,
 }
 
 
@@ -57,7 +58,7 @@ class LossModel:
             case "paderborn":
                 self.mdl = pb.PaderbornModel(model_path, self.material)
             case "sydney":
-                raise NotImplementedError("Sydney model not implemented yet")
+                self.mdl = sy.SydneyModel(model_path, self.material)
 
     def __call__(self, b_field, frequency, temperature):
         """Evaluate trajectory and estimate power loss.
