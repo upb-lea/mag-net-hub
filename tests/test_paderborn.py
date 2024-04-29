@@ -99,7 +99,7 @@ def test_full_accuracy_line_by_line():
 
 def test_accuracy_slightly():
     test_ds = pd.read_csv(
-        Path.cwd() / "tests" / "test_files" / "unit_test_data_ploss_at_450kWpm3.csv", dtype={"material": str}
+        Path(__file__).parent / "test_files" / "unit_test_data_ploss_at_450kWpm3.csv", dtype={"material": str}
     )
     for m_lbl in MATERIALS:
         mdl = LossModel(material=m_lbl, team="paderborn")
