@@ -347,7 +347,7 @@ def get_dataloader(data_B, data_F, data_T, norm, n_init=32):
     min_B, _ = torch.min(in_B, dim=1)
 
     s0 = get_operator_init(in_B[:, 0, 0]-in_dB[:, 0, 0], in_dB, max_B, min_B)  # Operator inital state
-    print(f"{in_B.shape=} {in_dB.shape=} {in_dB_dt.shape=} {in_F.shape=} {in_T.shape=} {s0.shape=}")
+
     # 6. Create dataloader to speed up data processing
     test_dataset = torch.utils.data.TensorDataset(torch.cat((in_B, in_dB, in_dB_dt), dim=2), torch.cat((in_F, in_T, s0),dim=1))
     kwargs = {'num_workers': 0, 'batch_size': 128, 'drop_last': False}
