@@ -6,6 +6,10 @@ It sanitizes user arguments that would be boilerplate code for any team's code.
 
 from pathlib import Path
 import magnethub.paderborn as pb
+import magnethub.sydney as sy
+import numpy as np
+
+L = 1024  # expected sequence length
 
 
 MATERIALS = [
@@ -30,7 +34,7 @@ MODEL_ROOT = Path(__file__).parent / "models"
 
 TEAMS = {
     "paderborn": pb.MAT2FILENAME,
-    "sydney": {},
+    "sydney": sy.MAT2FILENAME,
 }
 
 
@@ -57,7 +61,7 @@ class LossModel:
             case "paderborn":
                 self.mdl = pb.PaderbornModel(model_path, self.material)
             case "sydney":
-                raise NotImplementedError("Sydney model not implemented yet")
+                self.mdl = sy.SydneyModel(model_path, self.material)
 
     def __call__(self, b_field, frequency, temperature):
         """Evaluate trajectory and estimate power loss.
@@ -77,4 +81,21 @@ class LossModel:
         p, h: (X,) np.array, (X, Y) np.ndarray
             The estimated power loss (p) in W/m³ and the estimated magnetic field strength (h) in A/m.
         """
-        return self.mdl(b_field, frequency, temperature)
+        if b_field.ndim == 1:
+            b_field = b_field.reshape(1, -1)
+
+        if b_field.shape[-1] != L:
+            actual_len = b_field.shape[-1]
+            query_points = np.arange(L)
+            support_points = np.arange(actual_len) * L / actual_len
+            b_field = np.row_stack([np.interp(query_points, support_points, b_field[i]) for i in range(b_field.shape[0])])
+
+        p, h_seq = self.mdl(b_field, frequency, temperature)
+
+        # may interpolate to 1024 samples if h_seq too short
+        if h_seq.shape[-1] != L:
+            actual_len = h_seq.shape[-1]
+            query_points = np.arange(L)
+            support_points = np.arange(actual_len) * L / actual_len
+            h_seq = np.row_stack([np.interp(query_points, support_points, h_seq[i]) for i in range(h_seq.shape[0])])
+        return p, h_seq

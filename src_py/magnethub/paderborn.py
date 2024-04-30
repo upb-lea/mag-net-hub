@@ -355,13 +355,6 @@ def engineer_features(b_seq, freq, temp, material):
         case _:
             raise ValueError(f"Type of b_seq={type(b_seq)} nut supported. Please provide as np.ndarray or list")
 
-    # maybe resample b_seq to 1024 samples
-    if b_seq.shape[-1] != L:
-        actual_len = b_seq.shape[-1]
-        query_points = np.arange(L)
-        support_points = np.arange(actual_len) * L / actual_len
-        b_seq = np.row_stack([np.interp(query_points, support_points, b_seq[i]) for i in range(b_seq.shape[0])])
-
     waveforms = get_waveform_est(b_seq)
     waveforms_df = pd.DataFrame(
         np.zeros((len(waveforms), 4)),

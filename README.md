@@ -51,10 +51,6 @@ cd mag-net-hub
 pip install .
 ```
 
-### Matlab
-TBD
-
-
 ## Usage
 Models are provided as executable code with readily trained coefficients.
 Hence, no training is conducted in this project.
@@ -82,9 +78,6 @@ temps = np.random.randint(20, 80, size=100)
 p, h = mdl(b_waves, freqs, temps)
 
 ```
-
-### Matlab
-TBD
 
 
 ## Contributing
@@ -122,4 +115,9 @@ If you have added model coefficients and execution logic via code, it only requi
 `loss.py` and you are ready to fire this pull request (PR).
 
 If it is possible, please also consider adding tests for your model logic under `tests/`, writing comprehensive docstrings in your code with some comments, and discuss the performance of your model in your PR. 
+
+Other open ToDos are:
+ - Matlab implementation
+ - improve documentation
+
 Thank you!
