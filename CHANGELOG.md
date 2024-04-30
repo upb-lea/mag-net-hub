@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.5] - 2024-04-30
+### Added
+ - Sydney model
+
+
 ## [0.0.4] - 2024-03-30
 ### Changed
  - Change python import package name to be magnethub to avoid underscores
