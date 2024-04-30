@@ -28,83 +28,85 @@ MAT2FILENAME = {
 # Material normalization data (1.B 2.H 3.F 4.T 5.dB/dt)
 normsDict ={"77":  [[-2.63253458e-19,  7.47821754e-02],
                     [-7.60950004e-18,  1.10664739e+01],
-                    [ 5.24678898e+00,  2.89351404e-01],
-                    [ 5.87473793e+01,  2.40667381e+01],
-                    [ 6.16727829e+00,  3.83645439e+01]],
-            "78":  [[ 5.67033925e-19,  7.22424510e-02],
+                    [5.24678898e+00,  2.89351404e-01],
+                    [5.87473793e+01,  2.40667381e+01],
+                    [6.16727829e+00,  3.83645439e+01]],
+            "78":  [[5.67033925e-19,  7.22424510e-02],
                     [-1.54283684e-16,  1.15338828e+01],
-                    [ 5.23810768e+00,  2.89979160e-01],
-                    [ 5.87434082e+01,  2.40685291e+01],
-                    [ 6.09561586e+00,  3.81356049e+01]],
-            "79":  [[ 1.70344847e-13,  9.41321492e-02],
+                    [5.23810768e+00,  2.89979160e-01],
+                    [5.87434082e+01,  2.40685291e+01],
+                    [6.09561586e+00,  3.81356049e+01]],
+            "79":  [[1.70344847e-13,  9.41321492e-02],
                     [-4.54025068e-02,  3.20463941e+01],
-                    [ 5.21954346e+00,  2.66715437e-01],
-                    [ 5.52068787e+01,  2.37196522e+01],
-                    [ 6.77422905e+00,  3.90895233e+01]],
-            "N27": [[ 7.52738469e-19,  7.48951129e-02],
+                    [5.21954346e+00,  2.66715437e-01],
+                    [5.52068787e+01,  2.37196522e+01],
+                    [6.77422905e+00,  3.90895233e+01]],
+            "N27": [[7.52738469e-19,  7.48951129e-02],
                     [-8.97477366e-17,  1.47606605e+01],
-                    [ 5.24649334e+00,  2.89964765e-01],
-                    [ 5.87355194e+01,  2.40766029e+01],
-                    [ 6.17841434e+00,  3.84738274e+01]],
-            "N30": [[ 1.43320465e-19,  6.56044649e-02],
+                    [5.24649334e+00,  2.89964765e-01],
+                    [5.87355194e+01,  2.40766029e+01],
+                    [6.17841434e+00,  3.84738274e+01]],
+            "N30": [[1.43320465e-19,  6.56044649e-02],
                     [-1.57874135e-16,  1.09083332e+01],
-                    [ 5.31786680e+00,  2.78960317e-01],
-                    [ 5.86466904e+01,  2.40616817e+01],
-                    [ 7.01255989e+00,  4.09709969e+01]],
+                    [5.31786680e+00,  2.78960317e-01],
+                    [5.86466904e+01,  2.40616817e+01],
+                    [7.01255989e+00,  4.09709969e+01]],
             "N49": [[-8.99073580e-19,  8.94479227e-02],
-                    [ 4.15423721e-16,  3.70622618e+01],
-                    [ 5.25545311e+00,  3.00384015e-01],
-                    [ 5.94716339e+01,  2.44349327e+01],
-                    [ 6.75209475e+00,  3.91901703e+01]],           
-            "N87": [[ 1.72051200e-13,  6.26231476e-02],
-                    [ 4.02299992e-02,  7.61060358e+00],
-                    [ 5.26309967e+00,  2.87137657e-01],
-                    [ 5.83059006e+01,  2.40639057e+01],
-                    [ 6.53078842e+00,  3.93127785e+01]],
-            "3E6": [[ 1.01579639e-18,  7.04261607e-02],
-                    [ 2.34374135e-16,  7.21573964e+00],
-                    [ 5.34307003e+00,  2.66708523e-01],
-                    [ 5.86578026e+01,  2.40552864e+01],
-                    [ 7.23155785e+00,  4.15975838e+01]],
+                    [4.15423721e-16,  3.70622618e+01],
+                    [5.25545311e+00,  3.00384015e-01],
+                    [5.94716339e+01,  2.44349327e+01],
+                    [6.75209475e+00,  3.91901703e+01]],
+            "N87": [[1.72051200e-13,  6.26231476e-02],
+                    [4.02299992e-02,  7.61060358e+00],
+                    [5.26309967e+00,  2.87137657e-01],
+                    [5.83059006e+01,  2.40639057e+01],
+                    [6.53078842e+00,  3.93127785e+01]],
+            "3E6": [[1.01579639e-18,  7.04261607e-02],
+                    [2.34374135e-16,  7.21573964e+00],
+                    [5.34307003e+00,  2.66708523e-01],
+                    [5.86578026e+01,  2.40552864e+01],
+                    [7.23155785e+00,  4.15975838e+01]],
             "3F4": [[-1.75200068e-19,  5.98892952e-02],
                     [-9.48865199e-18,  4.74414811e+01],
-                    [ 5.14398336e+00,  3.04210454e-01],
-                    [ 5.76523476e+01,  2.43824081e+01],
-                    [ 6.23030663e+00,  3.64991379e+01]],
-            "T37": [[ 1.72051200e-13,  6.26231476e-02],
-                    [ 4.02299992e-02,  7.61060358e+00],
-                    [ 5.26309967e+00,  2.87137657e-01],
-                    [ 5.83059006e+01,  2.40639057e+01],
-                    [ 6.53078842e+00,  3.93127785e+01]],
+                    [5.14398336e+00,  3.04210454e-01],
+                    [5.76523476e+01,  2.43824081e+01],
+                    [6.23030663e+00,  3.64991379e+01]],
+            "T37": [[1.72051200e-13,  6.26231476e-02],
+                    [4.02299992e-02,  7.61060358e+00],
+                    [5.26309967e+00,  2.87137657e-01],
+                    [5.83059006e+01,  2.40639057e+01],
+                    [6.53078842e+00,  3.93127785e+01]],
             "3C90":[[-3.27923689e-19,  6.56109348e-02],
-                    [ 6.99196716e-17,  1.26583787e+01],
-                    [ 5.19875193e+00,  2.68499136e-01],
-                    [ 5.86049919e+01,  2.40574703e+01],
-                    [ 6.29652929e+00,  3.84585190e+01]],
+                    [6.99196716e-17,  1.26583787e+01],
+                    [5.19875193e+00,  2.68499136e-01],
+                    [5.86049919e+01,  2.40574703e+01],
+                    [6.29652929e+00,  3.84585190e+01]],
             "3C92":[[-2.35520104e-13,  6.53518693e-02],
-                    [ 1.18689366e-01,  1.23585692e+01],
-                    [ 5.16579533e+00,  2.73998171e-01],
-                    [ 5.84305267e+01,  2.40970516e+01],
-                    [ 5.88209248e+00,  3.69935722e+01]],
-            "3C94":[[ 1.21232679e-19,  7.44383659e-02],
+                    [1.18689366e-01,  1.23585692e+01],
+                    [5.16579533e+00,  2.73998171e-01],
+                    [5.84305267e+01,  2.40970516e+01],
+                    [5.88209248e+00,  3.69935722e+01]],
+            "3C94":[[1.21232679e-19,  7.44383659e-02],
                     [-2.19613879e-17,  1.18042579e+01],
-                    [ 5.22766781e+00,  2.68348873e-01],
-                    [ 5.87128143e+01,  2.40769634e+01],
-                    [ 6.53718996e+00,  3.91955910e+01]],
-            "3C95":[[ 5.64116728e-14,  7.90115297e-02],
-                    [ 1.11898437e-01,  1.29696641e+01],
-                    [ 5.18842697e+00,  2.69014776e-01],
-                    [ 5.86223640e+01,  2.40957470e+01],
-                    [ 6.25767517e+00,  3.84026108e+01]],
+                    [5.22766781e+00,  2.68348873e-01],
+                    [5.87128143e+01,  2.40769634e+01],
+                    [6.53718996e+00,  3.91955910e+01]],
+            "3C95":[[5.64116728e-14,  7.90115297e-02],
+                    [1.11898437e-01,  1.29696641e+01],
+                    [5.18842697e+00,  2.69014776e-01],
+                    [5.86223640e+01,  2.40957470e+01],
+                    [6.25767517e+00,  3.84026108e+01]],
            "ML95S":[[-1.53185180e-13,  1.15827541e-01],
-                    [ 3.84426934e-01,  4.45061606e+01],
-                    [ 5.21606445e+00,  2.65364528e-01],
-                    [ 5.70770302e+01,  2.44398289e+01],
-                    [ 7.30377579e+00,  4.04136391e+01]],
+                    [3.84426934e-01,  4.45061606e+01],
+                    [5.21606445e+00,  2.65364528e-01],
+                    [5.70770302e+01,  2.44398289e+01],
+                    [7.30377579e+00,  4.04136391e+01]],
              }
 
 # %% Initialize model
 class SydneyModel:
+    """The Sydney model."""
+
     def __init__(self, mdl_path, material):
         # Select GPU as default device
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -118,6 +120,7 @@ class SydneyModel:
         
     
     def __call__(self, data_B, data_F, data_T):
+        """Call method."""
         # ----------------------------------------------------------- batch execution  
         # if isinstance(data_F, np.ndarray):
 
@@ -137,81 +140,20 @@ class SydneyModel:
         data_P, h_series = data_P.cpu().numpy(), h_series.cpu().numpy()
         if data_P.size == 1:
             data_P = data_P.item()
-        if h_series.size == 1:
-            h_series = h_series.item()
+        if h_series.ndim == 1:
+            h_series = h_series.reshape(1, -1)
         return data_P, h_series
-        # ----------------------------------------------------------- one cycle execution 
-        # else:
-        #     # 1. Unify the data type
-        #     if isinstance(data_B, np.ndarray):
-        #         if data_B.ndim != 1:
-        #             data_B = data_B.flatten()
-        #     elif isinstance(data_B, list):
-        #             data_B = np.array(data_B)
-        #     seq_length = data_B.shape[0]
-        #
-        #     if isinstance(data_F, np.ndarray):
-        #         if data_F.ndim != 1:
-        #             data_F = data_F.flatten()
-        #     else:
-        #             data_F = np.array(data_F)
-        #
-        #     if isinstance(data_T, np.ndarray):
-        #         if data_T.ndim != 1:
-        #             data_T = data_T.flatten()
-        #     else:
-        #             data_T = np.array(data_T)
-        #
-        #     # 2. Add extra points for initial magnetization calculation
-        #     data_B = np.append(data_B,data_B[1:1+self.mdl.n_init],axis=0)
-        #     data_length = data_B.shape[0]
-        #
-        #     # 3. Format data into tensors
-        #     B = torch.from_numpy(data_B).view(-1,data_length,1).float()
-        #     F = torch.log10(torch.from_numpy(data_F).view(-1,1).float())
-        #     T = torch.from_numpy(data_T).view(-1,1).float()
-        #
-        #     # 4. Data Normalization
-        #     norm = self.mdl.norm
-        #     in_B = (B-norm[0][0])/norm[0][1]
-        #     in_T = (T-norm[3][0])/norm[3][1]
-        #     in_F = (F-norm[2][0])/norm[2][1]
-        #
-        #     # 5. Extra features
-        #     in_dB = torch.diff(in_B,dim=1)                     # Flux density change
-        #     in_dB = torch.cat((in_dB[:,0:1,:],in_dB),dim=1)
-        #
-        #     dB_dt = in_dB*(seq_length*F.view(-1,1,1))
-        #     in_dB_dt = (dB_dt-norm[4][0])/norm[4][1]        # Flux density change rate
-        #
-        #     max_B,_ = torch.max(in_B,dim=1)
-        #     min_B,_ = torch.min(in_B,dim=1)
-        #     s0 = get_operator_init(in_B[:,0,0]-in_dB[:,0,0], in_dB, max_B, min_B) # Operator inital state
-        #
-        #     # 6.Predict
-        #     with torch.no_grad():
-        #         # Start model evaluation explicitly
-        #         self.mdl.eval()
-        #         inputs = torch.cat((in_B,in_dB,in_dB_dt),dim=2).to(self.device)
-        #         vars = torch.cat((in_F, in_T, s0),dim=1).to(self.device)
-        #
-        #     # 7. Return results
-        #     Pv, H = self.mdl(inputs, vars)
-        #     Pv = Pv.detach().numpy()
-        #     return Pv[0], H
-        #
-    
 
-# %% Magnetization mechansim-determined neural network
 class MMINet(torch.nn.Module):
-
     """
-     Parameters:
-      - hidden_size: number of eddy current slices (RNN neuron)
-      - operator_size: number of operators
-      - input_size: number of inputs (1.B 2.dB 3.dB/dt)
-      - var_size: number of supplenmentary variables (1.F 2.T)        
-      - output_size: number of outputs (1.H)
+    Magnetization mechanism-determined neural network.
+
+    Parameters:
+    - hidden_size: number of eddy current slices (RNN neuron)
+    - operator_size: number of operators
+    - input_size: number of inputs (1.B 2.dB 3.dB/dt)
+    - var_size: number of supplenmentary variables (1.F 2.T)
+    - output_size: number of outputs (1.H)
     """
 
     def __init__(self, Material, hidden_size=30, operator_size=30,
@@ -235,10 +177,13 @@ class MMINet(torch.nn.Module):
 
     def forward(self, x, var):
         """
-         Parameters: 
-          - x(batch,seq,input_size): Input features (1.B, 2.dB, 3.dB/dt)  
-          - var(batch,var_size): Supplementary inputs (1.F 2.T)
-          - s0(batch,1): Operator inital states
+        Forward function.
+
+        Parameters:
+        x: batch,seq,input_size
+            Input features (1.B, 2.dB, 3.dB/dt)
+        var: batch,var_size
+            Supplementary inputs (1.F 2.T)
         """    
         batch_size = x.size(0)          # Batch size 
         seq_size = x.size(1)            # Ser
@@ -282,49 +227,46 @@ class MMINet(torch.nn.Module):
 
         # Compute the power loss density 
         B = (x[:,self.n_init:,0:1]*self.norm[0][1]+self.norm[0][0]) 
-        H = (output[:,self.n_init:,:]*self.norm[1][1]+self.norm[1][0]) 
-        Pv = torch.trapz(H,B,axis=1)*(10**(var[:,0:1]*self.norm[2][1]+self.norm[2][0]))
+        H = (output[:, self.n_init:,:]*self.norm[1][1]+self.norm[1][0])
+        Pv = torch.trapz(H, B, axis=1)*(10**(var[:, 0:1]*self.norm[2][1]+self.norm[2][0]))
 
         # Return results
         H = savgol_filter(H.detach().to("cpu").numpy(), window_length=7, polyorder=2,axis=1)
         H = torch.from_numpy(H).view(batch_size,-1,1)
-        real_H = torch.cat((H[:,-self.n_init:,:],H[:,:-self.n_init,:]),dim=1)
-        return torch.flatten(Pv).cpu(), torch.flatten(real_H).cpu()
+        real_H = torch.cat((H[:, -self.n_init:, :],H[:, :-self.n_init, :]), dim=1)
+        return torch.flatten(Pv).cpu(), real_H[:, :, 0].cpu()
 
-# %% MMINN Sub-layer: Static hysteresis prediction using stop operators 
 class StopOperatorCell():
+    """
+    MMINN Sub-layer: Static hysteresis prediction using stop operators.
 
-    """ 
-      Parameters:
-      - operator_size: number of operator
+    Parameters:
+    - operator_size: number of operator
     """
 
     def __init__(self, operator_size):
         self.operator_thre = torch.pow(torch.arange(1, operator_size+1, dtype=torch.float)/(operator_size+1), torch.tensor(3.0)).view(1,-1)*1
         
     def sslu(self, X):
-        """ Hardsimoid-like or symmetric saturated linear unit definition
-
-        """
+        """Hardsimoid-like or symmetric saturated linear unit definition."""
         a = torch.ones_like(X)
         return torch.max(-a,torch.min(a,X))
     
     def __call__(self, dB, state):
-        """ Update operator of each time step
-
-        """
+        """Update operator of each time step."""
         r = self.operator_thre.to(dB.device) 
         output = self.sslu((dB + state)/r)*r
         return output.float()
-  
-# %% MMINN subsubnetwork: Dynamic hysteresis prediction
-class EddyCell(torch.nn.Module):
 
-    """ 
-      Parameters:
-      - input_size: feature size 
-      - hidden_size: number of hidden units (eddy current layers)
-      - output_size: number of the output
+
+class EddyCell(torch.nn.Module):
+    """
+    MMINN subsubnetwork: Dynamic hysteresis prediction.
+
+    Parameters:
+    - input_size: feature size
+    - hidden_size: number of hidden units (eddy current layers)
+    - output_size: number of the output
     """
 
     def __init__(self, input_size, hidden_size, output_size=1):
@@ -338,44 +280,50 @@ class EddyCell(torch.nn.Module):
 
     def forward(self, x, hidden=None):
         """
-         Parameters:
-         - x(batch,input_size): features (1.B 2.dB/dt 3.F 4.T)
-         - hidden(batch,hidden_size): dynamic hysteresis effects at each eddy current layer 
+        Forward function.
+
+        Parameters:
+        x: batch,input_size
+            features (1.B 2.dB/dt 3.F 4.T)
+        hidden: batch,hidden_size
+            dynamic hysteresis effects at each eddy current layer
         """
         hidden = self.x2h(x) + self.h2h(hidden)
         hidden = torch.sigmoid(hidden)
         return hidden
 
 
-# %% Preprocess data into a data loader 
-def get_dataloader(data_B,data_F,data_T,norm,
-                   n_init = 32):
-    """Get a test dataloader 
+def get_dataloader(data_B, data_F, data_T, norm, n_init=32):
+    """
+    Preprocess data into a data loader.
+
+    Get a test dataloader.
 
     Parameters
     ---------
-    data_B/data_F/data_T : array 
-         B/F/T data
+    data_B: array
+         B data
+    data_F
+         F data
+    data_T
+         T data
     norm : list 
          B/F/T normalization data
     n_init : int
          Additional points for computing the history magnetization
     """
-    
     # Data pre-process 
     # 1. Down-sample to 128 points 
     seq_length = 128
     cols = np.array(range(0,1023,8))
-    if data_B.ndim == 1:
-        data_B = data_B.reshape(1, -1)
-    data_B = data_B[:,cols]
+    data_B = data_B[:, cols]
 
     # 2. Add extra points for initial magnetization calculation 
     data_length = seq_length + n_init
     data_B = np.hstack((data_B,data_B[:,1:1+n_init]))
 
     # 3. Format data into tensors 
-    B = torch.from_numpy(data_B).view(-1,data_length,1).float()
+    B = torch.from_numpy(data_B).view(-1, data_length, 1).float()
     if np.isscalar(data_F):
         data_F = np.array([data_F])
     if np.isscalar(data_T):
@@ -387,29 +335,30 @@ def get_dataloader(data_B,data_F,data_T,norm,
     in_B = (B-norm[0][0])/norm[0][1]
     in_F = (F-norm[2][0])/norm[2][1]
     in_T = (T-norm[3][0])/norm[3][1]
-    
+
     # 5. Extra features 
     in_dB = torch.diff(in_B,dim=1)                     # Flux density change
-    in_dB = torch.cat((in_dB[:,0:1,:],in_dB),dim=1)
+    in_dB = torch.cat((in_dB[:, 0:1, :], in_dB), dim=1)
     
-    dB_dt = in_dB*(seq_length*F.reshape(-1,1,1))
+    dB_dt = in_dB*(seq_length*F.reshape(-1, 1, 1))
     in_dB_dt = (dB_dt-norm[4][0])/norm[4][1]        # Flux density change rate
     
-    max_B,_ = torch.max(in_B,dim=1)
-    min_B,_ = torch.min(in_B,dim=1)
-    
-    s0 = get_operator_init(in_B[:,0,0]-in_dB[:,0,0], in_dB, max_B, min_B) # Operator inital state 
+    max_B, _ = torch.max(in_B, dim=1)
+    min_B, _ = torch.min(in_B, dim=1)
 
+    s0 = get_operator_init(in_B[:, 0, 0]-in_dB[:, 0, 0], in_dB, max_B, min_B)  # Operator inital state
+    print(f"{in_B.shape=} {in_dB.shape=} {in_dB_dt.shape=} {in_F.shape=} {in_T.shape=} {s0.shape=}")
     # 6. Create dataloader to speed up data processing
-    test_dataset = torch.utils.data.TensorDataset(torch.cat((in_B,in_dB,in_dB_dt),dim=2), torch.cat((in_F, in_T, s0),dim=1))
+    test_dataset = torch.utils.data.TensorDataset(torch.cat((in_B, in_dB, in_dB_dt), dim=2), torch.cat((in_F, in_T, s0),dim=1))
     kwargs = {'num_workers': 0, 'batch_size': 128, 'drop_last': False}
     test_loader = torch.utils.data.DataLoader(test_dataset, **kwargs)
 
     return test_loader
 
+
 # %% Predict the operator state at t0
 def get_operator_init(B0, dB, Bmax, Bmin, operator_size=30, max_out_H=1):
-    """Compute the inital state of hysteresis operators
+    """Compute the initial state of hysteresis operators.
 
     Parameters
     ---------
@@ -417,28 +366,34 @@ def get_operator_init(B0, dB, Bmax, Bmin, operator_size=30, max_out_H=1):
          Stop operator excitation at t1
     dB : torch_like (batch, data_length)
          Flux density changes at each t
-    Bmax/Bmin : torch_like (batch)
-         Max/Min flux density of each cycle 
+    Bmax: torch_like (batch)
+         Max flux density of each cycle
+    Bmin: torch_like (batch)
+         Min flux density of each cycle
+    operator_size: int
+         TBD
+    max_out_H:
+         TBD
     """
     # 1. Parameter setting
     batch = dB.shape[0]
     state = torch.zeros((batch, operator_size))
-    operator_thre = torch.pow(torch.arange(1, operator_size+1, dtype=torch.float)/operator_size+1, torch.tensor(3.0)).view(1,-1)*max_out_H
-   
+    operator_thre = torch.pow(torch.arange(1, operator_size+1, dtype=torch.float)/operator_size+1, torch.tensor(3.0)).view(1, -1)*max_out_H
+
     # 2. Iterate each excitation for the operator inital state computation
     for i in range(B0.__len__()):
         for j in range(operator_size):
-            r = operator_thre[0,j]
+            r = operator_thre[0, j]
             if (Bmax[i] >= r) or (Bmin[i] <= -r):
-                if dB[i,0] >= 0:
+                if dB[i, 0] >= 0:
                     if B0[i] > Bmin[i]+2*r:
-                        state[i,j] = r
+                        state[i, j] = r
                     else:
-                        state[i,j] = B0[i]-(r+Bmin[i])
+                        state[i, j] = B0[i]-(r+Bmin[i])
                 else:
                     if B0[i] < Bmax[i]-2*r:
-                        state[i,j] = -r
+                        state[i, j] = -r
                     else:
-                        state[i,j] = B0[i]+(r-Bmax[i])
+                        state[i, j] = B0[i]+(r-Bmax[i])
 
     return state
