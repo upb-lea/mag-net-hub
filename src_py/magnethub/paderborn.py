@@ -479,6 +479,8 @@ class PaderbornModel:
     arXiv preprint arXiv:2401.11488
 
     """
+    
+    expected_seq_len = 1024  # the expected sequence length
 
     def __init__(self, model_path, material):
         self.model_path = model_path

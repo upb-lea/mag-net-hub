@@ -4,9 +4,10 @@ from pathlib import Path
 import pytest
 from magnethub.loss import LossModel, MATERIALS
 
+TEAM_NAME = 'sydney'
 
 def test_smoke():
-    mdl = LossModel(material="3C92", team="sydney")
+    mdl = LossModel(material="3C92", team=TEAM_NAME)
     # dummy B field data (one trajectory with 1024 samples)
     b_wave = np.random.randn(1024) * 200e-3  # mT
     freq = 124062  # Hz
@@ -24,7 +25,7 @@ def test_smoke():
 
 
 def test_shorter_sequence():
-    mdl = LossModel(material="3C92", team="sydney")
+    mdl = LossModel(material="3C92", team=TEAM_NAME)
     # dummy B field data (one trajectory with 1024 samples)
     b_wave = np.random.randn(233) * 200e-3  # mT
     freq = 120_000  # Hz
@@ -34,11 +35,23 @@ def test_shorter_sequence():
     p, h = mdl(b_wave, freq, temp)
 
     assert np.isscalar(p), f"p has shape {p.shape}"
-    assert h.shape == (1, 1024), f"h has shape {h.shape}"
+    assert h.shape == (1, 233), f"h has shape {h.shape}"
 
+def test_longer_sequence():
+    mdl = LossModel(material="3C92", team=TEAM_NAME)
+    # dummy B field data (one trajectory with 1024 samples)
+    b_wave = np.random.randn(2313) * 200e-3  # mT
+    freq = 120_000  # Hz
+    temp = 77  # °C
+
+    # get scalar power loss
+    p, h = mdl(b_wave, freq, temp)
+
+    assert np.isscalar(p), f"p has shape {p.shape}"
+    assert h.shape == (1, 2313), f"h has shape {h.shape}"
 
 def test_batch_execution():
-    mdl = LossModel(material="3C92", team="sydney")
+    mdl = LossModel(material="3C92", team=TEAM_NAME)
 
     b_waves = np.random.randn(100, 1024) * 200e-3  # mT
     freqs = np.random.randint(100e3, 750e3, size=100)
@@ -55,7 +68,7 @@ def test_material_availability():
     temp = 58  # °C
 
     for m_lbl in MATERIALS:
-        mdl = LossModel(material=m_lbl, team="sydney")
+        mdl = LossModel(material=m_lbl, team=TEAM_NAME)
         p, h = mdl(b_wave, freq, temp)
         assert np.isscalar(p), f"p has shape {p.shape}"
         assert h.shape == (1, 1024), f"h has shape {h.shape}"
@@ -65,7 +78,7 @@ def test_accuracy_slightly():
         Path(__file__).parent / "test_files" / "unit_test_data_ploss_at_450kWpm3.csv", dtype={"material": str}
     )
     for m_lbl in MATERIALS:
-        mdl = LossModel(material=m_lbl, team="sydney")
+        mdl = LossModel(material=m_lbl, team=TEAM_NAME)
         test_mat_df = test_ds.query("material == @m_lbl")
         p, h = mdl(
             test_mat_df.loc[:, [c for c in test_mat_df if c.startswith("B_t_")]].to_numpy(),

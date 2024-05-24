@@ -75,7 +75,7 @@ class LossModel:
             The frequency operation point(s) in Hz
         temperature: scalar or 1D array-like
             The temperature operation point(s) in °C
-        
+
         Return
         ------
         p, h: (X,) np.array, (X, Y) np.ndarray
@@ -83,19 +83,28 @@ class LossModel:
         """
         if b_field.ndim == 1:
             b_field = b_field.reshape(1, -1)
+        original_seq_len = b_field.shape[-1]
 
+        L = self.mdl.expected_seq_len
         if b_field.shape[-1] != L:
             actual_len = b_field.shape[-1]
             query_points = np.arange(L)
             support_points = np.arange(actual_len) * L / actual_len
-            b_field = np.row_stack([np.interp(query_points, support_points, b_field[i]) for i in range(b_field.shape[0])])
+            # TODO Does a vectorized form of 1d interpolation exist?
+            b_field = np.row_stack(
+                [np.interp(query_points, support_points, b_field[i]) for i in range(b_field.shape[0])]
+            )
 
         p, h_seq = self.mdl(b_field, frequency, temperature)
 
-        # may interpolate to 1024 samples if h_seq too short
-        if h_seq.shape[-1] != L:
-            actual_len = h_seq.shape[-1]
-            query_points = np.arange(L)
-            support_points = np.arange(actual_len) * L / actual_len
-            h_seq = np.row_stack([np.interp(query_points, support_points, h_seq[i]) for i in range(h_seq.shape[0])])
+        if h_seq is not None:
+            assert (
+                h_seq.ndim == 2
+            ), f"H sequence has ndim={h_seq.ndim}, but 2 were expected with (#periods, #samples-per-period)"
+            # may interpolate to original sample size if h_seq too short or too long
+            if h_seq.shape[-1] != original_seq_len:
+                actual_len = h_seq.shape[-1]
+                query_points = np.arange(original_seq_len)
+                support_points = np.arange(actual_len) * original_seq_len / actual_len
+                h_seq = np.row_stack([np.interp(query_points, support_points, h_seq[i]) for i in range(h_seq.shape[0])])
         return p, h_seq

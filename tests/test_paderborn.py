@@ -34,7 +34,20 @@ def test_shorter_sequence():
     p, h = mdl(b_wave, freq, temp)
 
     assert np.isscalar(p), f"p has shape {p.shape}"
-    assert h.shape == (1, 1024), f"h has shape {h.shape}"
+    assert h.shape == (1, 233), f"h has shape {h.shape}"
+
+def test_longer_sequence():
+    mdl = LossModel(material="3C92", team="paderborn")
+    # dummy B field data (one trajectory with 1024 samples)
+    b_wave = np.random.randn(2313) * 200e-3  # mT
+    freq = 120_000  # Hz
+    temp = 77  # °C
+
+    # get scalar power loss
+    p, h = mdl(b_wave, freq, temp)
+
+    assert np.isscalar(p), f"p has shape {p.shape}"
+    assert h.shape == (1, 2313), f"h has shape {h.shape}"
 
 
 def test_batch_execution():
