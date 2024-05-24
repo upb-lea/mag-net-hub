@@ -70,7 +70,7 @@ class LossModel:
         ----
         b_field: (X, Y) array_like
             The magnetic flux density array(s) in T. First dimension X describes the batch size, the second Y
-             the time length (will always be interpolated to 1024 samples)
+             the time length of a full period
         frequency: scalar or 1D array-like
             The frequency operation point(s) in Hz
         temperature: scalar or 1D array-like
