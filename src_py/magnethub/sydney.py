@@ -159,18 +159,14 @@ class SydneyModel:
         if data_B.ndim == 1:
             data_B = np.array(data_B).reshape(1, -1)
 
-        loader = get_dataloader(data_B, data_F, data_T, self.mdl.norm)
+        _, ts_feats, scalar_feats = get_dataloader(data_B, data_F, data_T, self.mdl.norm)
 
         # 2.Validate the models
-        data_P = torch.Tensor([]).to(self.device)  # Allocate memory to store loss density
-
-        with torch.no_grad():
+        self.mdl.eval()
+        with torch.inference_mode():
             # Start model evaluation explicitly
-            self.mdl.eval()
-            for inputs, vars in loader:
-                Pv, h_series = self.mdl(inputs.to(self.device), vars.to(self.device))
+            data_P, h_series = self.mdl(ts_feats.to(self.device), scalar_feats.to(self.device))
 
-                data_P = torch.cat((data_P, Pv.to(self.device)), dim=0)
         data_P, h_series = data_P.cpu().numpy(), h_series.cpu().numpy()
 
         # 3.Return results
@@ -337,9 +333,7 @@ class EddyCell(torch.nn.Module):
 
 
 def get_dataloader(data_B, data_F, data_T, norm, n_init=32):
-    """
-    Preprocess data into a data loader.
-
+    """Preprocess data into a data loader.
     Get a test dataloader.
 
     Parameters
@@ -394,14 +388,14 @@ def get_dataloader(data_B, data_F, data_T, norm, n_init=32):
 
     s0 = get_operator_init(in_B[:, 0, 0] - in_dB[:, 0, 0], in_dB, max_B, min_B)  # Operator inital state
 
+    ts_feats = torch.cat((in_B, in_dB, in_dB_dt), dim=2)
+    scalar_feats = torch.cat((in_F, in_T, s0), dim=1)
     # 6. Create dataloader to speed up data processing
-    test_dataset = torch.utils.data.TensorDataset(
-        torch.cat((in_B, in_dB, in_dB_dt), dim=2), torch.cat((in_F, in_T, s0), dim=1)
-    )
+    test_dataset = torch.utils.data.TensorDataset(ts_feats, scalar_feats)
     kwargs = {"num_workers": 0, "batch_size": 128, "drop_last": False}
     test_loader = torch.utils.data.DataLoader(test_dataset, **kwargs)
 
-    return test_loader
+    return test_loader, ts_feats, scalar_feats
 
 
 # %% Predict the operator state at t0

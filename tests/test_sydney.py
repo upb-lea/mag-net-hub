@@ -52,14 +52,14 @@ def test_longer_sequence():
 
 def test_batch_execution():
     mdl = LossModel(material="3C92", team=TEAM_NAME)
-
-    b_waves = np.random.randn(100, 1024) * 200e-3  # mT
-    freqs = np.random.randint(100e3, 750e3, size=100)
-    temps = np.random.randint(20, 80, size=100)
+    seq_len = 1412
+    b_waves = np.random.randn(seq_len, 1024) * 200e-3  # mT
+    freqs = np.random.randint(100e3, 750e3, size=seq_len)
+    temps = np.random.randint(20, 80, size=seq_len)
     p, h = mdl(b_waves, freqs, temps)
 
-    assert p.size == 100, f"{p.size=}"
-    assert h.shape == (100, 1024), f"{h.shape=}"
+    assert p.size == seq_len, f"{p.size=}"
+    assert h.shape == (seq_len, 1024), f"{h.shape=}"
 
 
 def test_material_availability():
