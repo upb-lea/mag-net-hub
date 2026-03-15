@@ -409,9 +409,9 @@ def construct_tensor_seq2seq(
      - For time series tensors (#time steps, #profiles/periods, #features),
      - for scalar tensors (#profiles, #features).
     """
-    full_b = df.loc[:, ALL_B_COLS].to_numpy()
+    full_b = df.loc[:, ALL_B_COLS].to_numpy().copy()
     if training_data:
-        full_h = df.loc[:, ALL_H_COLS].to_numpy()
+        full_h = df.loc[:, ALL_H_COLS].to_numpy().copy()
     mat = df.iloc[0, :].loc["material"]
     df = df.drop(columns=[c for c in df if c.startswith(("H_t_", "B_t_", "material"))])
     assert len(df) > 0, "empty dataframe error"
@@ -423,7 +423,7 @@ def construct_tensor_seq2seq(
     full_b /= b_limit
     if training_data:
         full_h /= h_limit
-    orig_freq = X.loc[:, ["freq"]].copy().to_numpy()
+    orig_freq = X.loc[:, ["freq"]].to_numpy().copy()
     X.loc[:, ["temp", "freq"]] /= np.array([75.0, FREQ_SCALE], dtype=np.float32)
     X.loc[:, "freq"] = np.log(X.freq)
     other_cols = [c for c in x_cols if c not in ["temp", "freq"] and not c.startswith("wav_")]
