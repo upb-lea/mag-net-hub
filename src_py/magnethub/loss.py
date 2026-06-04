@@ -5,7 +5,7 @@ It sanitizes user arguments that would be boilerplate code for any team's code.
 """
 
 from pathlib import Path
-import magnethub.paderborn as pb
+import magnethub.paderborn_loss as pb
 import magnethub.sydney as sy
 import numpy as np
 

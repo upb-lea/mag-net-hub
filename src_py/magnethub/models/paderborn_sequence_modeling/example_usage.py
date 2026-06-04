@@ -9,7 +9,7 @@ import jax
 import jax.numpy as jnp
 import equinox as eqx
 
-from helper_functions import filter_spec, Normalizer, setup_featurize, setup_model
+from magnethub.paderborn_sequence import filter_spec, Normalizer, setup_featurize, setup_model
 
 
 def reconstruct_model_from_file(filename: pathlib.Path):
@@ -36,7 +36,6 @@ def reconstruct_model_from_file(filename: pathlib.Path):
     Returns:
         The ModelInterface object (i.e., the model wrapped into the corresponing interface)
     """
-
     filename = pathlib.Path(filename)
 
     # append the '.eqx' suffix if it is missing

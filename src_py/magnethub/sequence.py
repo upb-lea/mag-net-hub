@@ -2,12 +2,14 @@
 
 The SequenceModel class wraps sequence-to-sequence models from the MagNet Challenge 2025.
 Unlike the first-generation LossModel that estimates power losses from B, frequency, and temperature,
-SequenceModel takes a B field sequence, an initial H field guess, and temperature, then outputs
-an H field sequence of the same length as the input B field.
+SequenceModel takes a past B/H warmup window, a future B field sequence, and temperature, then outputs
+a future H field sequence of the same length as the future B field.
 """
 
 from pathlib import Path
 import numpy as np
+
+import magnethub.paderborn_sequence as pbs
 
 MATERIALS = {
     "T37",
@@ -29,9 +31,16 @@ MATERIALS = {
 
 MODEL_ROOT = Path(__file__).parent / "models"
 
-# Teams will be registered here as they provide models.
+# Teams are registered here as they provide models.
 # Format: {"team_name": team_module.MAT2FILENAME}
-TEAMS = {}
+TEAMS = {
+    "paderborn": pbs.MAT2FILENAME,
+}
+
+# Sub-directory under ``MODEL_ROOT`` that holds each team's coefficient files.
+TEAM_SUBDIR = {
+    "paderborn": pbs.MODEL_SUBDIR,
+}
 
 
 class SequenceModel:
@@ -55,51 +64,84 @@ class SequenceModel:
         model_file_name = TEAMS[self.team].get(self.material, None)
         if model_file_name is None:
             raise ValueError(f"Team {self.team.capitalize()} does not offer a model for material {self.material}")
-        model_path = MODEL_ROOT / self.team / model_file_name
+        model_path = MODEL_ROOT / TEAM_SUBDIR[self.team] / model_file_name
 
         # Load the corresponding model—dispatch based on team.
         # New teams are added here as match cases when their backends land.
         match self.team:
+            case "paderborn":
+                self.mdl = pbs.PaderbornSequenceModel(model_path, self.material)
             case _:
                 raise NotImplementedError(f"No model backend available yet for team '{self.team}'")
 
-        # After a real backend is loaded above, self.mdl must expose:
-        #   self.mdl(b_field, h_initial, temperature) -> h_seq   (np.ndarray)
+        # The loaded backend must expose:
+        #   self.mdl(b_past, h_past, b_future, temperature) -> h_future   (np.ndarray)
 
-    def __call__(self, b_field, h_initial, temperature):
-        """Evaluate B field sequence and estimate H field sequence.
+    def __call__(self, b_future, temperature, b_past=None, h_past=None):
+        """Estimate a future H field sequence from a warmup window and a future B sequence.
 
         Args
         ----
-        b_field : array_like, shape (Y,) or (X, Y)
-            Magnetic flux density waveform(s) in T.  X is the batch size, Y the
-            number of time-samples per period.  Any sequence length Y is accepted.
-        h_initial : scalar or 1-D array-like
-            Initial H field guess(es) in A/m from which the sequence integration
-            starts.  Scalar is broadcast to the batch; 1-D must match batch size X.
+        b_future : array_like, shape (F,) or (X, F)
+            Future magnetic flux density sequence in T for which H is predicted.  Any
+            sequence length F is accepted.
         temperature : scalar or 1-D array-like
             Temperature operation point(s) in °C.
+        b_past : array_like, shape (P,) or (X, P), optional
+            Past magnetic flux density warmup window in T.  X is the batch size, P the
+            number of warmup samples.  Any warmup length P is accepted.
+            Defaults to a single zero sample when omitted.
+        h_past : array_like, shape (P,) or (X, P), optional
+            Past magnetic field strength warmup window in A/m, aligned with ``b_past``.
+            Defaults to a single zero sample when omitted.
 
         Returns
         -------
-        h : np.ndarray, shape (X, Y)
-            Estimated magnetic field strength in A/m, same shape as the
-            (possibly reshaped) input ``b_field``.
+        h_future : np.ndarray, shape (X, F)
+            Estimated future magnetic field strength in A/m, same shape as the
+            (possibly reshaped) input ``b_future``.
         """
-        b_field = np.asarray(b_field, dtype=np.float64)
-        if b_field.ndim == 1:
-            b_field = b_field.reshape(1, -1)
+        b_future = np.asarray(b_future, dtype=np.float64)
+        if b_future.ndim == 1:
+            b_future = b_future.reshape(1, -1)
 
-        h_initial = np.atleast_1d(np.asarray(h_initial, dtype=np.float64))
+        batch = b_future.shape[0]
+
+        if b_past is None:
+            b_past = np.zeros((batch, 1), dtype=np.float64)
+        else:
+            b_past = np.asarray(b_past, dtype=np.float64)
+            if b_past.ndim == 0:
+                b_past = b_past.reshape(1, 1).repeat(batch, axis=0)
+            elif b_past.ndim == 1:
+                b_past = b_past.reshape(1, -1)
+
+        if h_past is None:
+            h_past = np.zeros((batch, 1), dtype=np.float64)
+        else:
+            h_past = np.asarray(h_past, dtype=np.float64)
+            if h_past.ndim == 0:
+                h_past = h_past.reshape(1, 1).repeat(batch, axis=0)
+            elif h_past.ndim == 1:
+                h_past = h_past.reshape(1, -1)
+
         temperature = np.atleast_1d(np.asarray(temperature, dtype=np.float64))
 
-        h_seq = self.mdl(b_field, h_initial, temperature)
-
-        assert h_seq.ndim == 2, (
-            f"H sequence has ndim={h_seq.ndim}, but 2 were expected with (#sequences, #samples-per-sequence)"
+        assert b_past.shape[0] == h_past.shape[0] == b_future.shape[0] == temperature.shape[0], (
+            f"Batch sizes disagree: b_past={b_past.shape[0]}, h_past={h_past.shape[0]}, "
+            f"b_future={b_future.shape[0]}, temperature={temperature.shape[0]}"
         )
-        assert h_seq.shape == b_field.shape, (
-            f"H sequence shape {h_seq.shape} does not match B field shape {b_field.shape}"
+        assert b_past.shape[1] == h_past.shape[1], (
+            f"Warmup lengths disagree: b_past has {b_past.shape[1]} samples, h_past has {h_past.shape[1]}"
         )
 
-        return h_seq
+        h_future = self.mdl(b_past, h_past, b_future, temperature)
+
+        assert h_future.ndim == 2, (
+            f"H sequence has ndim={h_future.ndim}, but 2 were expected with (#sequences, #samples-per-sequence)"
+        )
+        assert h_future.shape == b_future.shape, (
+            f"H sequence shape {h_future.shape} does not match future B field shape {b_future.shape}"
+        )
+
+        return h_future
