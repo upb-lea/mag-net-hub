@@ -6,36 +6,28 @@
 
 ![Lint and Test](https://github.com/upb-lea/mag-net-hub/actions/workflows/python-package.yml/badge.svg)
 
-This repository acts as a hub for selected power loss models that were elaborated by different competitors during the [MagNet Challenge 2023](https://github.com/minjiechen/magnetchallenge).
-Feel free to use these loss models for your power converter design as a complement to your datasheet.
+This repository provides a unified interface for certified magnetic component models from both the [MagNet Challenge 2023](https://github.com/minjiechen/magnetchallenge) and the [MagNet Challenge 2025](https://github.com/minjiechen/magnetchallenge-2).
+It hosts two families of models under a common API:
 
-The loss models are designed such that you can request a certain frequency, temperature, material and $B$ wave (sequence), in order to be provided with a scalar power loss estimate and a corresponding $H$ wave estimate.
+- **Loss models** accept a $B$ waveform, frequency, temperature, and material to produce a scalar power loss estimate together with a corresponding $H$ waveform.
+- **Sequence-to-sequence models** predict a future $H$ sequence directly from a short warmup window of past $B$/$H$ samples, a future $B$ sequence, and the temperature — operating on variable-length waveforms without resampling.
+
+Feel free to use these models for your power converter design as a complement to your datasheet.
 
 __Disclaimer__: Only steady-state and no varying DC-Bias is supported yet. 
 Moreover, training data stemmed from measurements on toroid-shaped ferrites that had a fix size.
 
-Supported materials:
-- ML95S
-- T37
-- 3C90
-- 3C92
-- 3C94
-- 3C95
-- 3E6
-- 3F4
-- 77
-- 78
-- 79
-- N27
-- N30
-- N49
-- N87
+Supported materials for the loss models:
+- 3C90, 3C92, 3C94, 3C95, 3E6, 3F4, 77, 78, 79, ML95S, N27, N30, N49, N87, T37
+
+Supported materials for the sequence-to-sequence models:
+- 3C90, 3C92, 3C94, 3C95, 3E6, 3F4, 77, 78, FEC007, FEC014, N27, N30, N49, N87, T37
 
 
 ## Installation
 
 ### Python
-We strongly recommend Python __3.10__.
+We strongly recommend Python __3.13__.
 Higher versions may also work.
 
 Then install through pip:
@@ -51,11 +43,19 @@ cd mag-net-hub
 pip install .
 ```
 
+If you use `uv`, then just add to dependencies:
+```
+uv add mag-net-hub
+```
+
 ## Usage
 Models are provided as executable code with readily trained coefficients.
 Hence, no training is conducted in this project.
 
 ### Python
+
+#### Power loss models
+
 ```py
 import numpy as np
 import magnethub as mh
@@ -79,6 +79,40 @@ p, h = mdl(b_waves, freqs, temps)
 
 ```
 
+#### Sequence-to-sequence models
+
+Sequence models predict a future $H$ waveform from a short warmup window of past $B$/$H$
+samples plus a future $B$ waveform and the temperature. Any sequence length is accepted.
+
+```py
+import numpy as np
+import magnethub as mh
+
+# instantiate material-specific sequence model
+mdl = mh.sequence.SequenceModel(material="3C90", team="paderborn")
+
+future = 1024
+b_future = np.random.randn(future) * 200e-3  # future B waveform in T
+temp = 25  # °C
+
+# simplest call — no warmup, past defaults to zero
+h = mdl(b_future, temp)
+
+# with an explicit warmup window for better accuracy
+warmup = 128
+b_past = np.random.randn(warmup) * 200e-3   # past B warmup window in T
+h_past = np.random.randn(warmup) * 5        # past H warmup window in A/m
+h = mdl(b_future, temp, b_past, h_past)
+
+# batch execution for 100 trajectories
+b_past = np.random.randn(100, warmup) * 200e-3
+h_past = np.random.randn(100, warmup) * 5
+b_future = np.random.randn(100, future) * 200e-3
+temps = np.random.randint(20, 80, size=100)
+h = mdl(b_future, temps, b_past, h_past)
+
+```
+
 
 ## Contributing
 Whether you want to contribute your submission to the MagNet Challenge, or you are a single contributor who wants to add an awesome model to this hub -- any contribution is welcome.
@@ -94,17 +128,23 @@ See the below folder structure overview with annotations on how to contribute a 
 │   └── magnethub
 │       ├── __init__.py
 │       ├── loss.py
+│       ├── sequence.py
 │       ├── models
 │       │   ├── paderborn
 │       │   │   ├── changelog.md
 │       │   │   ├── cnn_3C90_experiment_1b4d8_model_f3915868_seed_0_fold_0.pt
 │       │   │   ├── cnn_3C92_experiment_ea1fe_model_72510647_seed_0_fold_0.pt
 |       |   |   └──  ...
-│       │   ├── sydney
+│       │   ├── paderborn_sequence_modeling
+│       │   │   ├── 3C90_GRU8_MagNetHub-reduced-features-f32_5c3f8051_seed49.eqx
+│       │   │   ├── example_usage.py
+│       │   │   └──  ...
+│       │   ├── sydney
 │       │   │   └── ...
 │       │   └── <add your contributor folder here>
 │       │   │   └── <add your model coefficients here>
-│       ├── paderborn.py
+│       ├── paderborn_loss.py
+│       ├── paderborn_sequence.py
 |       ├── sydney.py
 |       ├── <add your model code here>
 
@@ -112,7 +152,7 @@ See the below folder structure overview with annotations on how to contribute a 
 
 Any number of models can be incorporated easily according to this code structure policy.
 If you have added model coefficients and execution logic via code, it only requires to be hooked in
-`loss.py` and you are ready to fire this pull request (PR).
+`loss.py` (or `sequence.py` for sequence-to-sequence models) and you are ready to fire this pull request (PR).
 
 If it is possible, please also consider adding tests for your model logic under `tests/`, writing comprehensive docstrings in your code with some comments, and discuss the performance of your model in your PR. 
 

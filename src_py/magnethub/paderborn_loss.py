@@ -7,6 +7,7 @@ Source: https://github.com/upb-lea/hardcore-magnet-challenge
 import numpy as np
 import pandas as pd
 import torch
+import warnings
 
 
 L = 1024  # expected sequence length
@@ -479,17 +480,19 @@ class PaderbornModel:
     arXiv preprint arXiv:2401.11488
 
     """
-    
+
     expected_seq_len = 1024  # the expected sequence length
 
     def __init__(self, model_path, material):
         self.model_path = model_path
         self.material = material
-        self.mdl = torch.jit.load(model_path)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            self.mdl = torch.jit.load(model_path)  # jit.load is deprecated, but non-jit models are not available
         self.mdl.eval()
-        assert (
-            material in MAT_CONST_H_MAX and material in MAT_CONST_B_MAX
-        ), f"Requested material '{material}' is not supported"
+        assert material in MAT_CONST_H_MAX and material in MAT_CONST_B_MAX, (
+            f"Requested material '{material}' is not supported"
+        )
         self.b_limit = MAT_CONST_B_MAX[material]
         self.h_limit = MAT_CONST_H_MAX[material]
         self.predicts_p_directly = True
@@ -506,7 +509,7 @@ class PaderbornModel:
             The frequency operation point(s) in Hz
         temperature: scalar or 1D array-like
             The temperature operation point(s) in °C
-        
+
         Return
         ------
         p, h: (X,) np.array, (X, Y) np.ndarray

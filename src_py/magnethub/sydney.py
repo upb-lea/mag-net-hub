@@ -368,8 +368,8 @@ def get_dataloader(data_B, data_F, data_T, norm, n_init=32):
         data_F = np.array([data_F])
     if np.isscalar(data_T):
         data_T = np.array([data_T])
-    T = torch.from_numpy(data_T).view(-1, 1).float()
-    F = torch.from_numpy(np.log10(data_F)).view(-1, 1).float()
+    T = torch.from_numpy(data_T.copy()).view(-1, 1).float()
+    F = torch.from_numpy(np.log10(data_F.copy())).view(-1, 1).float()
 
     # 4. Data Normalization
     in_B = (B - norm[0][0]) / norm[0][1]

@@ -5,7 +5,7 @@ It sanitizes user arguments that would be boilerplate code for any team's code.
 """
 
 from pathlib import Path
-import magnethub.paderborn as pb
+import magnethub.paderborn_loss as pb
 import magnethub.sydney as sy
 import numpy as np
 
@@ -91,7 +91,7 @@ class LossModel:
             query_points = np.arange(L)
             support_points = np.arange(actual_len) * L / actual_len
             # TODO Does a vectorized form of 1d interpolation exist?
-            b_field = np.row_stack(
+            b_field = np.vstack(
                 [np.interp(query_points, support_points, b_field[i]) for i in range(b_field.shape[0])]
             )
 
@@ -106,5 +106,5 @@ class LossModel:
                 actual_len = h_seq.shape[-1]
                 query_points = np.arange(original_seq_len)
                 support_points = np.arange(actual_len) * original_seq_len / actual_len
-                h_seq = np.row_stack([np.interp(query_points, support_points, h_seq[i]) for i in range(h_seq.shape[0])])
+                h_seq = np.vstack([np.interp(query_points, support_points, h_seq[i]) for i in range(h_seq.shape[0])])
         return p, h_seq
