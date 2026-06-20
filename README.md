@@ -9,8 +9,8 @@
 This repository provides a unified interface for certified magnetic component models from both the [MagNet Challenge 2023](https://github.com/minjiechen/magnetchallenge) and the [MagNet Challenge 2025](https://github.com/minjiechen/magnetchallenge-2).
 It hosts two families of models under a common API:
 
-- **Loss models** accept a $B$ waveform, frequency, temperature, and material to produce a scalar power loss estimate together with a corresponding $H$ waveform.
-- **Sequence-to-sequence models** predict a future $H$ sequence directly from a short warmup window of past $B$/$H$ samples, a future $B$ sequence, and the temperature — operating on variable-length waveforms without resampling.
+- **Loss models** accept a periodic $B$ waveform, frequency, temperature, and material to produce a scalar power loss estimate together with a corresponding periodic $H$ waveform (optional).
+- **Sequence-to-sequence models** predict a future $H$ sequence directly from a short warmup window of past $B$ / $H$ samples, a future $B$ sequence, and the temperature — operating on variable-length waveforms without resampling.
 
 Feel free to use these models for your power converter design as a complement to your datasheet.
 
@@ -55,6 +55,7 @@ Hence, no training is conducted in this project.
 ### Python
 
 #### Power loss models
+These models assume periodic B field signals. Any given sequence is resampled to a model-specific sample rate automatically.
 
 ```py
 import numpy as np
@@ -82,7 +83,7 @@ p, h = mdl(b_waves, freqs, temps)
 #### Sequence-to-sequence models
 
 Sequence models predict a future $H$ waveform from a short warmup window of past $B$/$H$
-samples plus a future $B$ waveform and the temperature. Any sequence length is accepted.
+samples plus a future $B$ waveform and the temperature. Any sequence length is accepted but a fix sample rate of 16 MHz is assumed.
 
 ```py
 import numpy as np
@@ -92,17 +93,17 @@ import magnethub as mh
 mdl = mh.sequence.SequenceModel(material="3C90", team="paderborn")
 
 future = 1024
-b_future = np.random.randn(future) * 200e-3  # future B waveform in T
+b_future = np.random.randn(future) * 200e-3  # future B window in T
 temp = 25  # °C
 
 # simplest call — no warmup, past defaults to zero
-h = mdl(b_future, temp)
+h = mdl(b_future, temp)  # H field in A/m
 
 # with an explicit warmup window for better accuracy
 warmup = 128
 b_past = np.random.randn(warmup) * 200e-3   # past B warmup window in T
 h_past = np.random.randn(warmup) * 5        # past H warmup window in A/m
-h = mdl(b_future, temp, b_past, h_past)
+h = mdl(b_future, temp, b_past, h_past)     # future H window in A/m
 
 # batch execution for 100 trajectories
 b_past = np.random.randn(100, warmup) * 200e-3
