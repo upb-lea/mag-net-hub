@@ -84,6 +84,8 @@ p, h = mdl(b_waves, freqs, temps)
 
 Sequence models predict a future $H$ waveform from a short warmup window of past $B$/$H$
 samples plus a future $B$ waveform and the temperature. Any sequence length is accepted but a fix sample rate of 16 MHz is assumed.
+The models are only valid within the range of their training data, most notably a maximum slope $|\mathrm{d}B/\mathrm{d}t|$;
+an `OutOfTrainingRangeWarning` is emitted otherwise. See [`src_py/magnethub/models/README.md`](src_py/magnethub/models/README.md) for the limits per material.
 
 ```py
 import numpy as np
@@ -131,6 +133,7 @@ See the below folder structure overview with annotations on how to contribute a 
 │       ├── loss.py
 │       ├── sequence.py
 │       ├── models
+│       │   ├── README.md
 │       │   ├── paderborn
 │       │   │   ├── changelog.md
 │       │   │   ├── cnn_3C90_experiment_1b4d8_model_f3915868_seed_0_fold_0.pt

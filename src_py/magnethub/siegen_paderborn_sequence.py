@@ -512,6 +512,19 @@ def setup_model(
 # Sub-directory under ``magnethub/models`` that holds the ``.eqx`` coefficient files.
 MODEL_SUBDIR = "siegen_paderborn_sequence_modeling"
 
+# Sample rate (Hz) the models were trained at.  The slope features are computed per sample,
+# so the physical slope limits below scale with this rate.
+F_SAMPLE = 16e6
+
+
+class OutOfTrainingRangeWarning(UserWarning):
+    """Raised when the model input leaves the value range covered by the training data.
+
+    The GRU models are purely data-driven and extrapolate poorly: outside the training range
+    they may produce unphysical H sequences (DC offsets for symmetric excitation, amplitudes
+    far off, strong dependence on the warmup).  See GitHub issue #11.
+    """
+
 # Mapping from material label to the corresponding model coefficient file.
 # The competition-internal labels A-E correspond to the following real materials:
 #   A = 3C92, B = 3C95, C = FEC007, D = FEC014, E = T37
@@ -583,6 +596,10 @@ class SiegenPaderbornSequenceModel:
 
     Recurrent (GRU) model that predicts a future H field sequence from a warmup
     window of past B and H samples plus a future B sequence and the temperature.
+
+    The models are only reliable within the range of the training data, most notably
+    the maximum slope |dB/dt|.  Every call checks the input against the training maxima
+    stored in the normalizer and emits an :class:`OutOfTrainingRangeWarning` otherwise.
     """
 
     def __init__(self, model_path, material):
@@ -612,6 +629,8 @@ class SiegenPaderbornSequenceModel:
         h_future : (X, F) np.ndarray
             The estimated future magnetic field strength in A/m.
         """
+        self._check_input_range(b_past, b_future, temperature)
+
         B_past = jnp.asarray(b_past)
         H_past = jnp.asarray(h_past)
         B_future = jnp.asarray(b_future)
@@ -620,3 +639,45 @@ class SiegenPaderbornSequenceModel:
         h_future = self.mdl(B_past=B_past, H_past=H_past, B_future=B_future, T=T)
 
         return np.asarray(h_future)
+
+    def _check_input_range(self, b_past, b_future, temperature):
+        """Warn if B, its slope, its curvature, or T exceed the maxima seen during training.
+
+        The normalizer stores the absolute training maxima of B and T as well as of the two
+        slope features (first and second per-sample gradient of B / B_max, see
+        ``setup_featurize``).  Since these are plain maxima, a ratio above 1 means the input
+        lies beyond anything the model has seen.  Steady-state excitation with large amplitude
+        at high frequency (e.g. 0.4 T at 100 kHz for 3C90) typically violates the slope limit.
+        """
+        norm = self.mdl.normalizer
+        # Features are computed on the concatenated past and future B, mirror that here.
+        b_all_norm = np.concatenate([b_past, b_future], axis=1) / norm.B_max
+
+        violations = []
+        b_ratio = np.abs(b_all_norm).max()
+        if b_ratio > 1:
+            violations.append(f"|B| up to {b_ratio:.2f}x the training maximum of {norm.B_max:.3f} T")
+        if b_all_norm.shape[1] > 1:
+            db = np.gradient(b_all_norm, axis=1)
+            db_ratio = np.abs(db).max() / norm.norm_fe_max[0]
+            if db_ratio > 1:
+                db_dt_max = norm.norm_fe_max[0] * norm.B_max * F_SAMPLE
+                violations.append(
+                    f"|dB/dt| up to {db_ratio:.2f}x the training maximum of {db_dt_max:.3g} T/s "
+                    f"(at {F_SAMPLE / 1e6:g} MHz sampling)"
+                )
+            d2b_ratio = np.abs(np.gradient(db, axis=1)).max() / norm.norm_fe_max[1]
+            if d2b_ratio > 1:
+                violations.append(f"|d2B/dt2| up to {d2b_ratio:.2f}x the training maximum")
+        t_ratio = np.abs(temperature).max() / norm.T_max
+        if t_ratio > 1:
+            violations.append(f"T up to {t_ratio:.2f}x the training maximum of {norm.T_max:g} °C")
+
+        if violations:
+            warnings.warn(
+                f"Input for material {self.material} is outside the training range: "
+                + "; ".join(violations)
+                + ". The H prediction is an extrapolation and may be unphysical.",
+                OutOfTrainingRangeWarning,
+                stacklevel=4,  # point at the caller of SequenceModel.__call__
+            )

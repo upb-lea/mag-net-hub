@@ -1,8 +1,10 @@
+import warnings
 import numpy as np
 import pandas as pd
 from pathlib import Path
 import pytest
 from magnethub.sequence import SequenceModel, MATERIALS, TEAMS
+from magnethub.siegen_paderborn_sequence import OutOfTrainingRangeWarning
 
 
 class TestSequenceModelValidation:
@@ -36,6 +38,8 @@ def model():
     return SequenceModel(material="3C90", team="siegen_paderborn")
 
 
+# random noise is far outside the training range, only API behavior is tested here
+@pytest.mark.filterwarnings("ignore::magnethub.siegen_paderborn_sequence.OutOfTrainingRangeWarning")
 class TestSequenceModelCall:
     """Tests for the __call__ interface using a real model backend."""
 
@@ -194,6 +198,33 @@ class TestSequenceModelAccuracy:
             assert corr > 0.95, f"Low correlation {corr:.4f} for operating point {i}"
 
 
+class TestOutOfTrainingRangeWarning:
+    """Inputs beyond the training maxima must be flagged (GitHub issue #11)."""
+
+    def test_steep_steady_state_warns(self, model):
+        # 0.4 T triangle at 100 kHz exceeds the 3C90 training maximum of |dB/dt|
+        f_s, f = 16e6, 100e3
+        t = np.arange(int(f_s / f) * 2) / f_s
+        b = 0.4 * (1.0 - 4.0 * np.abs((t * f + 0.25) % 1.0 - 0.5))
+        with pytest.warns(OutOfTrainingRangeWarning, match="dB/dt"):
+            model(b, 25.0)
+
+    def test_temperature_warns(self, model):
+        with pytest.warns(OutOfTrainingRangeWarning, match="T up to"):
+            model(np.zeros(16), 100.0)
+
+    def test_measured_data_does_not_warn(self, model):
+        test_ds = pd.read_csv(Path(__file__).parent / "test_files" / "unit_test_data_sequence_3C90.csv")
+        B = test_ds[[c for c in test_ds if c.startswith("B_t_")]].to_numpy()
+        H = test_ds[[c for c in test_ds if c.startswith("H_t_")]].to_numpy()
+        T = test_ds["temp"].to_numpy()
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", OutOfTrainingRangeWarning)
+            model(B[:, 128:], T, B[:, :128], H[:, :128])
+
+
+# random noise is far outside the training range, only loading and output shape are tested here
+@pytest.mark.filterwarnings("ignore::magnethub.siegen_paderborn_sequence.OutOfTrainingRangeWarning")
 def test_material_availability():
     """Every advertised material must load and produce a finite H sequence."""
     warmup, future = 64, 256
