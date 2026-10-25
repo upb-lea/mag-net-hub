@@ -2,5 +2,5 @@
 import magnethub.loss
 import magnethub.sequence
 import magnethub.paderborn_loss
-import magnethub.paderborn_sequence
+import magnethub.siegen_paderborn_sequence
 import magnethub.sydney

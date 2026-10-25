@@ -9,7 +9,7 @@ a future H field sequence of the same length as the future B field.
 from pathlib import Path
 import numpy as np
 
-import magnethub.paderborn_sequence as pbs
+import magnethub.siegen_paderborn_sequence as sps
 
 MATERIALS = {
     "T37",
@@ -34,12 +34,12 @@ MODEL_ROOT = Path(__file__).parent / "models"
 # Teams are registered here as they provide models.
 # Format: {"team_name": team_module.MAT2FILENAME}
 TEAMS = {
-    "paderborn": pbs.MAT2FILENAME,
+    "siegen_paderborn": sps.MAT2FILENAME,
 }
 
 # Sub-directory under ``MODEL_ROOT`` that holds each team's coefficient files.
 TEAM_SUBDIR = {
-    "paderborn": pbs.MODEL_SUBDIR,
+    "siegen_paderborn": sps.MODEL_SUBDIR,
 }
 
 
@@ -50,7 +50,7 @@ class SequenceModel:
     variable-length B field waveforms (no resampling to a fixed length).
     """
 
-    def __init__(self, material="3C92", team="paderborn"):
+    def __init__(self, material="3C92", team="siegen_paderborn"):
         self.material = material.upper()
         self.team = team.lower()
 
@@ -69,8 +69,8 @@ class SequenceModel:
         # Load the corresponding model—dispatch based on team.
         # New teams are added here as match cases when their backends land.
         match self.team:
-            case "paderborn":
-                self.mdl = pbs.PaderbornSequenceModel(model_path, self.material)
+            case "siegen_paderborn":
+                self.mdl = sps.SiegenPaderbornSequenceModel(model_path, self.material)
             case _:
                 raise NotImplementedError(f"No model backend available yet for team '{self.team}'")
 

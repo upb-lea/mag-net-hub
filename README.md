@@ -90,7 +90,7 @@ import numpy as np
 import magnethub as mh
 
 # instantiate material-specific sequence model
-mdl = mh.sequence.SequenceModel(material="3C90", team="paderborn")
+mdl = mh.sequence.SequenceModel(material="3C90", team="siegen_paderborn")
 
 future = 1024
 b_future = np.random.randn(future) * 200e-3  # future B window in T
@@ -136,7 +136,7 @@ See the below folder structure overview with annotations on how to contribute a 
 │       │   │   ├── cnn_3C90_experiment_1b4d8_model_f3915868_seed_0_fold_0.pt
 │       │   │   ├── cnn_3C92_experiment_ea1fe_model_72510647_seed_0_fold_0.pt
 |       |   |   └──  ...
-│       │   ├── paderborn_sequence_modeling
+│       │   ├── siegen_paderborn_sequence_modeling
 │       │   │   ├── 3C90_GRU8_MagNetHub-reduced-features-f32_5c3f8051_seed49.eqx
 │       │   │   ├── example_usage.py
 │       │   │   └──  ...
@@ -145,7 +145,7 @@ See the below folder structure overview with annotations on how to contribute a 
 │       │   └── <add your contributor folder here>
 │       │   │   └── <add your model coefficients here>
 │       ├── paderborn_loss.py
-│       ├── paderborn_sequence.py
+│       ├── siegen_paderborn_sequence.py
 |       ├── sydney.py
 |       ├── <add your model code here>
 

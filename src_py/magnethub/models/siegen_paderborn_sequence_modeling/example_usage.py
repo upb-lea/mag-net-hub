@@ -9,7 +9,7 @@ import jax
 import jax.numpy as jnp
 import equinox as eqx
 
-from magnethub.paderborn_sequence import filter_spec, Normalizer, setup_featurize, setup_model
+from magnethub.siegen_paderborn_sequence import filter_spec, Normalizer, setup_featurize, setup_model
 
 
 def reconstruct_model_from_file(filename: pathlib.Path):

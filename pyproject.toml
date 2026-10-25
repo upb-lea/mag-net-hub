@@ -39,7 +39,7 @@ packages = ["src_py/magnethub"]
 include = [
     "src_py/magnethub/*.py",
     "src_py/magnethub/models/paderborn/*.pt",
-    "src_py/magnethub/models/paderborn_sequence_modeling/*.eqx",
+    "src_py/magnethub/models/siegen_paderborn_sequence_modeling/*.eqx",
     "src_py/magnethub/models/sydney/*.pt",
     "tests",
 ]

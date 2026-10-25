@@ -1,7 +1,7 @@
-"""Paderborn sequence-to-sequence H-field estimators for the MagNet Challenge 2025.
+"""Siegen-Paderborn sequence-to-sequence H-field estimators for the MagNet Challenge 2025.
 
-This backend wraps the recurrent (GRU) sequence models contributed by Paderborn
-University.  Unlike the first-generation :class:`magnethub.paderborn_loss.PaderbornModel`
+This backend wraps the recurrent (GRU) sequence models contributed by the joint
+Siegen-Paderborn team.  Unlike the first-generation :class:`magnethub.paderborn_loss.PaderbornModel`
 (which maps a fixed-length B waveform, frequency, and temperature to a scalar power
 loss and an H waveform), these models operate directly on variable-length B field
 sequences.  Given a short warmup window of past B and H samples together with a future
@@ -510,7 +510,7 @@ def setup_model(
 
 
 # Sub-directory under ``magnethub/models`` that holds the ``.eqx`` coefficient files.
-MODEL_SUBDIR = "paderborn_sequence_modeling"
+MODEL_SUBDIR = "siegen_paderborn_sequence_modeling"
 
 # Mapping from material label to the corresponding model coefficient file.
 # The competition-internal labels A-E correspond to the following real materials:
@@ -578,8 +578,8 @@ def reconstruct_model_from_file(filename):
     return wrapped_model
 
 
-class PaderbornSequenceModel:
-    """The Paderborn sequence-to-sequence H-field estimator.
+class SiegenPaderbornSequenceModel:
+    """The Siegen-Paderborn sequence-to-sequence H-field estimator.
 
     Recurrent (GRU) model that predicts a future H field sequence from a warmup
     window of past B and H samples plus a future B sequence and the temperature.

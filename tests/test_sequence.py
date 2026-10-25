@@ -10,30 +10,30 @@ class TestSequenceModelValidation:
 
     def test_invalid_material_raises(self):
         with pytest.raises(ValueError, match="not supported"):
-            SequenceModel(material="INVALID", team="paderborn")
+            SequenceModel(material="INVALID", team="siegen_paderborn")
 
     def test_invalid_team_raises(self):
         with pytest.raises(ValueError, match="not supported"):
             SequenceModel(material="3C92", team="nonexistent")
 
-    def test_paderborn_is_registered(self):
-        assert "paderborn" in TEAMS, "Expected the paderborn team to be registered"
+    def test_siegen_paderborn_is_registered(self):
+        assert "siegen_paderborn" in TEAMS, "Expected the siegen_paderborn team to be registered"
 
     def test_case_insensitive_material(self):
         """Material should be uppercased internally."""
-        mdl = SequenceModel(material="3c90", team="paderborn")
+        mdl = SequenceModel(material="3c90", team="siegen_paderborn")
         assert mdl.material == "3C90"
 
     def test_case_insensitive_team(self):
         """Team should be lowercased internally."""
-        mdl = SequenceModel(material="3C90", team="PADERBORN")
-        assert mdl.team == "paderborn"
+        mdl = SequenceModel(material="3C90", team="SIEGEN_PADERBORN")
+        assert mdl.team == "siegen_paderborn"
 
 
 @pytest.fixture(scope="module")
 def model():
-    """A real Paderborn sequence model for 3C90, shared across tests in a module."""
-    return SequenceModel(material="3C90", team="paderborn")
+    """A real Siegen-Paderborn sequence model for 3C90, shared across tests in a module."""
+    return SequenceModel(material="3C90", team="siegen_paderborn")
 
 
 class TestSequenceModelCall:
@@ -138,7 +138,7 @@ class TestSequenceModelBackend:
         """A SequenceModel with a fake inner backend, bypassing __init__."""
         mdl = object.__new__(SequenceModel)
         mdl.material = "3C90"
-        mdl.team = "paderborn"
+        mdl.team = "siegen_paderborn"
         mdl.mdl = lambda bp, hp, bf, t: np.zeros_like(bf)
         return mdl
 
@@ -203,7 +203,7 @@ def test_material_availability():
     temp = 50.0
 
     for m_lbl in MATERIALS:
-        mdl = SequenceModel(material=m_lbl, team="paderborn")
+        mdl = SequenceModel(material=m_lbl, team="siegen_paderborn")
         h = mdl(b_future, temp, b_past, h_past)
         assert h.shape == (1, future), f"h has shape {h.shape} for material {m_lbl}"
         assert np.isfinite(h).all(), f"non-finite H for material {m_lbl}"
