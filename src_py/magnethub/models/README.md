@@ -8,6 +8,8 @@ The model code lives one level up (`magnethub/*.py`); the files here are loaded 
 | `paderborn/` | Paderborn University (MagNet Challenge 2023) | CNN power loss model | `mh.loss.LossModel(team="paderborn")` | `paderborn_loss.py` |
 | `sydney/` | University of Sydney (MagNet Challenge 2023) | Power loss model | `mh.loss.LossModel(team="sydney")` | `sydney.py` |
 | `siegen_paderborn_sequence_modeling/` | University of Siegen & Paderborn University (MagNet Challenge 2025) | GRU sequence-to-sequence H estimator | `mh.sequence.SequenceModel(team="siegen_paderborn")` | `siegen_paderborn_sequence.py` |
+| `kirchgaessner2026/` (`*_classical.json`) | Wilhelm Kirchgässner (2026) | Classical equivalent circuit, sequence-to-sequence H estimator | `mh.sequence.SequenceModel(team="kirchgaessner2026")` | `kirchgaessner2026_sequence.py` |
+| `kirchgaessner2026/` (`*_mlp16.json`) | Wilhelm Kirchgässner (2026) | MLP16-scheduled equivalent circuit, sequence-to-sequence H estimator | `mh.sequence.SequenceModel(team="kirchgaessner2026_mlp16")` | `kirchgaessner2026_sequence.py` |
 
 ## What the models are for
 
@@ -19,9 +21,20 @@ They are recurrent models (GRU with 8 hidden states) that run sample by sample a
 The models were trained on the MagNet Challenge 2025 data, which consists of measured, mostly switched (piecewise-linear) excitation.
 They are adapted from [RHINO-MAG](https://github.com/upb-lea/RHINO-MAG).
 
-## Validity range of the sequence models
+## Equivalent circuits (`kirchgaessner2026`, `kirchgaessner2026_mlp16`)
 
-The sequence models are purely data-driven and **do not extrapolate reliably**.
+These models describe each material by an equivalent circuit built from classical elements of hysteresis modeling, discretized at the 16 MHz sampling step: a measurement correction of $B$, a reversible saturation curve, six viscous play operators (a Prandtl–Ishlinskii model), two linear relaxations, and a mean-field feedback of $H$, followed by a first-order lag of the measured $H$.
+In the classical circuit, the 32 parameters per material are constant or linear in temperature.
+In the MLP16-scheduled circuit, a small MLP per material sets the element values at every step from the excitation, while the hysteresis memory stays in the states of the circuit.
+Both estimate the circuit state from the warmup window with a learned estimator and predict the field as measured by the MagNet Challenge 2025 test bench.
+The JSON files hold the trained parameters; the code is a NumPy port of the PyTorch models of [ferrite-bh-circuit](https://github.com/wkirgsn/ferrite-bh-circuit), where training, evaluation and the paper are published.
+
+The classical circuit has no range check.
+The MLP16-scheduled circuit emits an `OutOfTrainingRangeWarning` if the temperature leaves the trained 25–70 °C or if $|B|$, the per-sample slope or the per-sample curvature of $B$ exceed the maxima of the material's training data, since its MLP then extrapolates.
+
+## Validity range of the GRU sequence models
+
+The GRU sequence models (`siegen_paderborn`) are purely data-driven and **do not extrapolate reliably**.
 Outside the range of their training data they can produce unphysical results, e.g., an $H$ loop with a large DC offset under symmetric excitation, wrong amplitudes, or a prediction that strongly depends on the warmup window (see [issue #11](https://github.com/upb-lea/mag-net-hub/issues/11)).
 
 The most relevant constraint is the **slope** $|\mathrm{d}B/\mathrm{d}t|$.
