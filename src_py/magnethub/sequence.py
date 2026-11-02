@@ -10,6 +10,7 @@ from pathlib import Path
 import numpy as np
 
 import magnethub.siegen_paderborn_sequence as sps
+import magnethub.kirchgaessner2026_sequence as k26
 
 MATERIALS = {
     "T37",
@@ -35,11 +36,15 @@ MODEL_ROOT = Path(__file__).parent / "models"
 # Format: {"team_name": team_module.MAT2FILENAME}
 TEAMS = {
     "siegen_paderborn": sps.MAT2FILENAME,
+    "kirchgaessner2026": k26.MAT2FILENAME,
+    "kirchgaessner2026_mlp16": k26.MAT2FILENAME_MLP16,
 }
 
 # Sub-directory under ``MODEL_ROOT`` that holds each team's coefficient files.
 TEAM_SUBDIR = {
     "siegen_paderborn": sps.MODEL_SUBDIR,
+    "kirchgaessner2026": k26.MODEL_SUBDIR,
+    "kirchgaessner2026_mlp16": k26.MODEL_SUBDIR,
 }
 
 
@@ -71,6 +76,8 @@ class SequenceModel:
         match self.team:
             case "siegen_paderborn":
                 self.mdl = sps.SiegenPaderbornSequenceModel(model_path, self.material)
+            case "kirchgaessner2026" | "kirchgaessner2026_mlp16":
+                self.mdl = k26.Kirchgaessner2026Circuit(model_path, self.material)
             case _:
                 raise NotImplementedError(f"No model backend available yet for team '{self.team}'")
 

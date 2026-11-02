@@ -23,6 +23,18 @@ Supported materials for the loss models:
 Supported materials for the sequence-to-sequence models:
 - 3C90, 3C92, 3C94, 3C95, 3E6, 3F4, 77, 78, FEC007, FEC014, N27, N30, N49, N87, T37
 
+## Available models
+
+A model is selected by its material and its team key:
+
+| Team key | Model type | API | Description |
+|---|---|---|---|
+| `paderborn` | Power loss | `mh.loss.LossModel` | CNN of Paderborn University (MagNet Challenge 2023) |
+| `sydney` | Power loss | `mh.loss.LossModel` | Model of the University of Sydney (MagNet Challenge 2023) |
+| `siegen_paderborn` | Sequence-to-sequence | `mh.sequence.SequenceModel` | GRU with 8 hidden states of the University of Siegen and Paderborn University ([RHINO-MAG](https://github.com/upb-lea/RHINO-MAG), MagNet Challenge 2025) |
+| `kirchgaessner2026` | Sequence-to-sequence | `mh.sequence.SequenceModel` | Classical equivalent circuit, 32 parameters per material ([ferrite-bh-circuit](https://github.com/wkirgsn/ferrite-bh-circuit)) |
+| `kirchgaessner2026_mlp16` | Sequence-to-sequence | `mh.sequence.SequenceModel` | Equivalent circuit gain-scheduled by an MLP with 16 hidden units, 656 parameters per material ([ferrite-bh-circuit](https://github.com/wkirgsn/ferrite-bh-circuit)) |
+
 
 ## Installation
 
@@ -86,6 +98,7 @@ Sequence models predict a future $H$ waveform from a short warmup window of past
 samples plus a future $B$ waveform and the temperature. Any sequence length is accepted but a fix sample rate of 16 MHz is assumed.
 The models are only valid within the range of their training data, most notably a maximum slope $|\mathrm{d}B/\mathrm{d}t|$;
 an `OutOfTrainingRangeWarning` is emitted otherwise. See [`src_py/magnethub/models/README.md`](src_py/magnethub/models/README.md) for the limits per material.
+Any sequence-to-sequence team key from the table above can be used, e.g., `team="kirchgaessner2026"`.
 
 ```py
 import numpy as np
@@ -145,10 +158,15 @@ See the below folder structure overview with annotations on how to contribute a 
 │       │   │   └──  ...
 │       │   ├── sydney
 │       │   │   └── ...
+│       │   ├── kirchgaessner2026
+│       │   │   ├── 3C90_classical.json
+│       │   │   ├── 3C90_mlp16.json
+│       │   │   └──  ...
 │       │   └── <add your contributor folder here>
 │       │   │   └── <add your model coefficients here>
 │       ├── paderborn_loss.py
 │       ├── siegen_paderborn_sequence.py
+│       ├── kirchgaessner2026_sequence.py
 |       ├── sydney.py
 |       ├── <add your model code here>
 

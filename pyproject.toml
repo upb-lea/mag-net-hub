@@ -41,6 +41,7 @@ include = [
     "src_py/magnethub/models/paderborn/*.pt",
     "src_py/magnethub/models/siegen_paderborn_sequence_modeling/*.eqx",
     "src_py/magnethub/models/sydney/*.pt",
+    "src_py/magnethub/models/kirchgaessner2026/*.json",
     "tests",
 ]
 
