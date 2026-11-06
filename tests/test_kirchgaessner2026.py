@@ -87,27 +87,24 @@ def test_accuracy_on_measured_data(team):
         assert np.corrcoef(h_pred[i], h_true[i])[0, 1] > 0.95, f"low correlation for operating point {i}"
 
 
-def test_mlp16_warns_outside_training_range():
-    """The scheduling MLP warns for temperatures and slopes beyond its training data."""
-    mdl = SequenceModel(material="3C90", team="kirchgaessner2026_mlp16")
+@pytest.mark.parametrize("team", ["kirchgaessner2026", "kirchgaessner2026_mlp16"])
+def test_warns_outside_training_range(team):
+    """Both circuits warn for temperatures, amplitudes and slopes beyond their training data."""
+    mdl = SequenceModel(material="3C90", team=team)
     with pytest.warns(OutOfTrainingRangeWarning, match="T from"):
         mdl(np.zeros(16), 100.0)
+    with pytest.warns(OutOfTrainingRangeWarning, match=r"\|B\| up to"):
+        mdl(np.full(16, 1.0), 25.0)
     t = np.arange(320) / 16e6
     b = 0.4 * (1.0 - 4.0 * np.abs((t * 100e3 + 0.25) % 1.0 - 0.5))   # 0.4 T triangle at 100 kHz
     with pytest.warns(OutOfTrainingRangeWarning, match="dB/dt"):
         mdl(b, 25.0)
 
 
-def test_mlp16_measured_data_does_not_warn():
+@pytest.mark.parametrize("team", ["kirchgaessner2026", "kirchgaessner2026_mlp16"])
+def test_measured_data_does_not_warn(team):
     """Measured data within the training range raise no warning."""
     B, H, T = measured_3c90()
     with warnings.catch_warnings():
         warnings.simplefilter("error", OutOfTrainingRangeWarning)
-        SequenceModel(material="3C90", team="kirchgaessner2026_mlp16")(B[:, 128:], T, B[:, :128], H[:, :128])
-
-
-def test_classical_does_not_warn():
-    """The classical circuit has no range check."""
-    with warnings.catch_warnings():
-        warnings.simplefilter("error", OutOfTrainingRangeWarning)
-        SequenceModel(material="3C90", team="kirchgaessner2026")(np.zeros(16), 100.0)
+        SequenceModel(material="3C90", team=team)(B[:, 128:], T, B[:, :128], H[:, :128])

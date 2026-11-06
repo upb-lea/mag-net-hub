@@ -9,8 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Sequence-to-sequence models `kirchgaessner2026` (classical equivalent circuit, 32 parameters per material) and
   `kirchgaessner2026_mlp16` (MLP16-scheduled equivalent circuit) for all 15 MagNet Challenge 2025 materials, a NumPy
-  port of https://github.com/wkirgsn/ferrite-bh-circuit; the scheduled circuit emits an `OutOfTrainingRangeWarning`
-  outside its training range.
+  port of https://github.com/wkirgsn/ferrite-bh-circuit; both circuits emit an `OutOfTrainingRangeWarning`
+  outside their training range.
 
 ## [0.0.11] - 2024-08-27
 ### Fixed
