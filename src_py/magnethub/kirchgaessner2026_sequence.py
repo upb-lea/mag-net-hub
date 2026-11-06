@@ -52,8 +52,8 @@ def _detrend(x, tt):
 class Kirchgaessner2026Circuit:
     """Equivalent circuit of one material: classical (constant element values) or MLP-scheduled.
 
-    The coefficient file holds the circuit and estimator parameters as trained (``params``), and for the scheduled
-    circuit the MLP weights (``mlp``) and the training range of its inputs (``validity``).
+    The coefficient file holds the circuit and estimator parameters as trained (``params``), the training range of the
+    inputs (``validity``) and, for the scheduled circuit, the MLP weights (``mlp``).
     """
 
     def __init__(self, model_path, material):
@@ -206,7 +206,7 @@ class Kirchgaessner2026Circuit:
         return y
 
     def _check_input_range(self, b_past, b_future, temperature):
-        """Warn if T, |B|, its per-sample slope or curvature leave the range of the training data of the MLP."""
+        """Warn if T, |B|, its per-sample slope or curvature leave the range of the material's training data."""
         v = self.validity
         b = np.concatenate([b_past, b_future], axis=1)
         violations = []
@@ -225,7 +225,8 @@ class Kirchgaessner2026Circuit:
                                   "training maximum")
         if violations:
             warnings.warn(
-                f"Input for material {self.material} is outside the training range of the scheduling MLP: "
+                f"Input for material {self.material} is outside the training range of the "
+                + ("scheduling MLP" if self.mlp is not None else "classical circuit") + ": "
                 + "; ".join(violations)
                 + ". The H prediction is an extrapolation.",
                 OutOfTrainingRangeWarning,

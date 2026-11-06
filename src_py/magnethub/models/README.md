@@ -29,8 +29,8 @@ In the MLP16-scheduled circuit, a small MLP per material sets the element values
 Both estimate the circuit state from the warmup window with a learned estimator and predict the field as measured by the MagNet Challenge 2025 test bench.
 The JSON files hold the trained parameters; the code is a NumPy port of the PyTorch models of [ferrite-bh-circuit](https://github.com/wkirgsn/ferrite-bh-circuit), where training, evaluation and the paper are published.
 
-The classical circuit has no range check.
-The MLP16-scheduled circuit emits an `OutOfTrainingRangeWarning` if the temperature leaves the trained 25–70 °C or if $|B|$, the per-sample slope or the per-sample curvature of $B$ exceed the maxima of the material's training data, since its MLP then extrapolates.
+Both circuits emit an `OutOfTrainingRangeWarning` if the temperature leaves the trained 25–70 °C or if $|B|$, the per-sample slope or the per-sample curvature of $B$ exceed the maxima of the material's training data (stored as `validity` in each coefficient file), since the circuit then extrapolates.
+For the classical circuit, the temperature dependence of every element is at most linear and the saturation curve is fitted only up to the largest measured $|B|$; for the scheduled circuit, the MLP additionally extrapolates.
 
 ## Validity range of the GRU sequence models
 
